@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <RootNamespace>$(BaseNamespace)</RootNamespace>
+        <AssemblyName>$(RootNamespace)</AssemblyName>
+        <DocumentationFile>Properties\$(AssemblyName).xml</DocumentationFile>
+        <Description>Core library</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Collections.NET" Version="1.7.0" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,63 @@
+<Project>
+
+    <PropertyGroup>
+        <!-- Base namespace -->
+        <BaseNamespace>NStructuredDataModel</BaseNamespace>
+
+        <!-- Build properties -->
+        <LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningsAsErrors />
+        <NoWarn>1701;1702;1591;NU5104;NU5105</NoWarn>
+
+        <!-- Package properties -->
+        <Version>0.1.0</Version>
+        <Authors>Jeevan James</Authors>
+        <Company>Jeevan James</Company>
+        <Product>[ENTER PRODUCT NAME HERE]</Product>
+        <Copyright>Copyright (c) 2020 Jeevan James</Copyright>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/JeevanJames/[PROJECT NAME]</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/JeevanJames/[PROJECT NAME].git</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>[TAGS]</PackageTags>
+        <NeutralLanguage>en-US</NeutralLanguage>
+
+        <!-- SourceLink properties-->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)StructuredDataModel.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Roslynator.Analyzers" Version="3.2.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.27.0.35380">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+</Project>

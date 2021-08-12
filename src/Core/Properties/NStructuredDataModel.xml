@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NStructuredDataModel</name>
+    </assembly>
+    <members>
+        <member name="M:NStructuredDataModel.AbstractNode.GetPropertyParentNode(System.Collections.Generic.ICollection{System.String})">
+            <summary>
+                Returns the parent of a property path in the Variable. If parts of the property
+                tree do not exist, then they will be created.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NStructuredDataModel.Yaml</name>
+    </assembly>
+    <members>
+        <member name="T:NStructuredDataModel.Yaml.YamlDocumentTraverser">
+            <summary>
+                Traverses a yaml document and constructs a dynamic object model from it.
+            </summary>
+        </member>
+        <member name="M:NStructuredDataModel.Yaml.YamlDocumentTraverser.#ctor(YamlDotNet.RepresentationModel.YamlDocument,NStructuredDataModel.AbstractNode)">
+            <summary>
+                Initializes a new instance of the <see cref="T:NStructuredDataModel.Yaml.YamlDocumentTraverser"/> class.
+            </summary>
+            <param name="yaml">The yaml document to traverse.</param>
+            <param name="model">The dynamic object to update with the object model.</param>
+        </member>
+        <member name="M:NStructuredDataModel.Yaml.YamlDocumentTraverser.SetObjectValue(NStructuredDataModel.AbstractNode,System.String)">
+            <summary>
+                This method is called for YAML mapping nodes, which are objects with properties. No
+                scalar value is being set; we just create a variable node for this property, if one
+                doesn't exist.
+            </summary>
+        </member>
+    </members>
+</doc>
