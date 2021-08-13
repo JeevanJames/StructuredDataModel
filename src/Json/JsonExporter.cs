@@ -49,6 +49,9 @@ namespace NStructuredDataModel.Json
                         case string str:
                             _writer.WriteString(propertyName, str);
                             break;
+                        case char charValue:
+                            _writer.WriteString(propertyName, charValue.ToString());
+                            break;
                         case bool boolValue:
                             _writer.WriteBoolean(propertyName, boolValue);
                             break;

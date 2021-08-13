@@ -9,8 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Collections.NET" Version="1.7.0" />
-      <PackageReference Include="Humanizer.Core" Version="2.11.10" />
+        <PackageReference Include="Collections.NET" Version="1.7.0" />
+        <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     </ItemGroup>
 
 </Project>

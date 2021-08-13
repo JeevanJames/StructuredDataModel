@@ -15,13 +15,13 @@
         <Version>0.1.0</Version>
         <Authors>Jeevan James</Authors>
         <Company>Jeevan James</Company>
-        <Product>[ENTER PRODUCT NAME HERE]</Product>
-        <Copyright>Copyright (c) 2020 Jeevan James</Copyright>
+        <Product>NStructuredDataModel</Product>
+        <Copyright>Copyright (c) 2021 Jeevan James</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/JeevanJames/[PROJECT NAME]</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/JeevanJames/[PROJECT NAME].git</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/JeevanJames/StructuredDataModel</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/JeevanJames/StructuredDataModel.git</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
-        <PackageTags>[TAGS]</PackageTags>
+        <PackageTags>structured-data-model json yaml xml</PackageTags>
         <NeutralLanguage>en-US</NeutralLanguage>
 
         <!-- SourceLink properties-->

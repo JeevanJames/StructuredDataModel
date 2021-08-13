@@ -28,15 +28,19 @@ namespace NStructuredDataModel
                 return false;
             }
 
+            // To avoid guess-allocating arrays for each node, check if there is a "0" element, and
+            // if so, then proceed with the assumption that it is an array.
             if (!TryGetValue("0", out object? firstValue))
             {
                 array = Array.Empty<object?>();
                 return false;
             }
 
+            // Create an array and populate the first item.
             array = new object?[Count];
             array[0] = firstValue;
 
+            // Proceed with populating the rest of the array until we determine it is not an array.
             int index = 1;
             while (index < Count)
             {

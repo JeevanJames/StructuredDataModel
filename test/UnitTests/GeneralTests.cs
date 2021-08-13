@@ -79,7 +79,7 @@ namespace NStructuredDataModel.UnitTests
 
             JsonFormat jsonFormat = new(new JsonFormatOptions
             {
-                PropertyNameConverter = PropertyNameConverters.PascalCase,
+                PropertyNameConverter = NameConverters.PascalCase,
             });
             string json = await jsonFormat.ExportAsync(model);
             json.ShouldNotBeNullOrWhiteSpace();
@@ -88,7 +88,7 @@ namespace NStructuredDataModel.UnitTests
             {
                 RootElementName = "Configuration",
                 ArrayElementName = "Item",
-                PropertyNameConverter = PropertyNameConverters.CamelCase,
+                PropertyNameConverter = NameConverters.CamelCase,
             });
             string xml = await xmlFormat.ExportAsync(model);
             xml.ShouldNotBeNullOrWhiteSpace();
