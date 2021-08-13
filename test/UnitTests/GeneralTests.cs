@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using NStructuredDataModel.Json;
+using NStructuredDataModel.Xml;
 using NStructuredDataModel.Yaml;
 
 using Shouldly;
@@ -59,12 +60,24 @@ namespace NStructuredDataModel.UnitTests
             YamlFormat yamlFormat = new();
             StructuredDataModel model = await yamlFormat.ImportAsync(Yaml);
 
-            JsonFormat jsonFormat = new();
+            JsonFormat jsonFormat = new(new JsonFormatOptions
+            {
+                PropertyNameConverter = PropertyNameConverters.PascalCase,
+            });
             string json = await jsonFormat.ExportAsync(model);
-
             json.ShouldNotBeNullOrWhiteSpace();
 
+            XmlFormat xmlFormat = new(new XmlFormatOptions
+            {
+                RootElementName = "Configuration",
+                ArrayElementName = "Item",
+                PropertyNameConverter = PropertyNameConverters.CamelCase,
+            });
+            string xml = await xmlFormat.ExportAsync(model);
+            xml.ShouldNotBeNullOrWhiteSpace();
+
             _output.WriteLine(json);
+            _output.WriteLine(xml);
         }
 
 #pragma warning disable SA1203 // Constants should appear before fields
@@ -74,10 +87,22 @@ log:
     write_to_file: true
     max_depth: 4
 settings:
-    default: 10,
-    numbers: [2, 4, 6, 8]
-"
+    default: 10
+    heroes:
+        -
+            name: Flash
+            power: Superspeed
+        -
+            name: Batman
+            power: ~
+        -
+            name: Ironman
+            power: Technology
+        -
+            name: Spiderman
+            power: ""Web slinging""
+";
 #pragma warning restore SA1203 // Constants should appear before fields
-;
+
     }
 }

@@ -6,21 +6,20 @@ using YamlDotNet.RepresentationModel;
 
 namespace NStructuredDataModel.Yaml
 {
-#pragma warning disable CA1812
     /// <summary>
     ///     Traverses a yaml document and constructs a dynamic object model from it.
     /// </summary>
-    internal sealed class YamlDocumentTraverser
+    internal sealed class YamlImporter
     {
         private readonly YamlMappingNode _yamlRoot;
         private readonly AbstractNode _model;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="YamlDocumentTraverser"/> class.
+        ///     Initializes a new instance of the <see cref="YamlImporter"/> class.
         /// </summary>
         /// <param name="yaml">The yaml document to traverse.</param>
         /// <param name="model">The dynamic object to update with the object model.</param>
-        internal YamlDocumentTraverser(YamlDocument yaml, AbstractNode model)
+        internal YamlImporter(YamlDocument yaml, AbstractNode model)
         {
             if (yaml is null)
                 throw new ArgumentNullException(nameof(yaml));

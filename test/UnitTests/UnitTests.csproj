@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Core\Core.csproj" />
       <ProjectReference Include="..\..\src\Json\Json.csproj" />
+      <ProjectReference Include="..\..\src\Xml\Xml.csproj" />
       <ProjectReference Include="..\..\src\Yaml\Yaml.csproj" />
     </ItemGroup>
 

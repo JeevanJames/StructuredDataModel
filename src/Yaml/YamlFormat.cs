@@ -5,8 +5,18 @@ using YamlDotNet.RepresentationModel;
 
 namespace NStructuredDataModel.Yaml
 {
-    public sealed class YamlFormat : StructuredDataFormatBase
+    public sealed class YamlFormat : StructuredDataFormatBase<YamlFormatOptions>
     {
+        public YamlFormat()
+            : base(YamlFormatOptions.Default)
+        {
+        }
+
+        public YamlFormat(YamlFormatOptions options)
+            : base(options)
+        {
+        }
+
         protected override void Import(TextReader reader, AbstractNode node)
         {
             if (reader is null)
@@ -19,8 +29,8 @@ namespace NStructuredDataModel.Yaml
 
             foreach (YamlDocument yamlDocument in yaml.Documents)
             {
-                YamlDocumentTraverser traverser = new(yamlDocument, node);
-                traverser.Traverse();
+                YamlImporter importer = new(yamlDocument, node);
+                importer.Traverse();
             }
         }
     }

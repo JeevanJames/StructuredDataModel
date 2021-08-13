@@ -20,6 +20,35 @@ namespace NStructuredDataModel
         {
         }
 
+        public bool TryGetAsArray(out object?[] array)
+        {
+            if (Count == 0)
+            {
+                array = Array.Empty<object?>();
+                return false;
+            }
+
+            if (!TryGetValue("0", out object? firstValue))
+            {
+                array = Array.Empty<object?>();
+                return false;
+            }
+
+            array = new object?[Count];
+            array[0] = firstValue;
+
+            int index = 1;
+            while (index < Count)
+            {
+                if (!TryGetValue(index.ToString(), out object? value))
+                    return false;
+                array[index] = value;
+                index++;
+            }
+
+            return true;
+        }
+
         public T? GetValue<T>(string propertyName, T? defaultValue = default)
         {
             return TryGetValue(propertyName, out object? valueObject) ? (T?)valueObject : defaultValue;

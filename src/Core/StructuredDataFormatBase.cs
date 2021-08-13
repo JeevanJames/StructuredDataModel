@@ -4,8 +4,16 @@ using System.Threading.Tasks;
 
 namespace NStructuredDataModel
 {
-    public abstract class StructuredDataFormatBase : IStructuredDataFormat
+    public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
+        where TOptions : StructuredDataFormatOptions
     {
+        protected StructuredDataFormatBase(TOptions options)
+        {
+            Options = options;
+        }
+
+        public TOptions Options { get; }
+
         public virtual Task ImportAsync(TextReader reader, AbstractNode node)
         {
             Import(reader, node);

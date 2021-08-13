@@ -5,11 +5,21 @@ using System.Threading.Tasks;
 
 namespace NStructuredDataModel.Json
 {
-    public sealed class JsonFormat : StructuredDataFormatBase
+    public sealed class JsonFormat : StructuredDataFormatBase<JsonFormatOptions>
     {
+        public JsonFormat()
+            : base(JsonFormatOptions.Default)
+        {
+        }
+
+        public JsonFormat(JsonFormatOptions options)
+            : base(options)
+        {
+        }
+
         public override async Task ExportAsync(TextWriter writer, AbstractNode node)
         {
-            await using JsonExporter exporter = new();
+            await using JsonExporter exporter = new(Options);
             ReadOnlyMemory<char> json = await exporter.ExportAsync(node).ConfigureAwait(false);
             await writer.WriteAsync(json).ConfigureAwait(false);
         }
