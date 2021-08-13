@@ -5,7 +5,7 @@
         <RootNamespace>$(BaseNamespace)</RootNamespace>
         <AssemblyName>$(RootNamespace)</AssemblyName>
         <DocumentationFile>Properties\$(AssemblyName).xml</DocumentationFile>
-        <Description>Core library</Description>
+        <Description>Core library that defines the in-memory object model structure and the interfaces for importing and exporting to various file formats.</Description>
     </PropertyGroup>
 
     <ItemGroup>

@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace NStructuredDataModel
 {
     [Serializable]
-    public abstract class AbstractNode : Dictionary<string, object?>
+    public abstract partial class AbstractNode : Dictionary<string, object?>
     {
         protected AbstractNode()
             : base(StringComparer.OrdinalIgnoreCase)
@@ -138,7 +138,7 @@ namespace NStructuredDataModel
                 // If the property value is not a Node, then it is a leaf node value. But
                 // that should not be the case here as we expect a parent node, which should be a
                 // VariableNode.
-                else if (propertyValue is not Node)
+                else if (propertyValue is not AbstractNode)
                 {
                     string errorMessage =
                         $"The property {propertyNameBuilder} has already been assigned a scalar or array value. "
