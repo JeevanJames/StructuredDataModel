@@ -38,23 +38,6 @@ namespace NStructuredDataModel.UnitTests
         }
 
         [Fact]
-        public async Task FluentApiTest()
-        {
-            var model = new StructuredDataModel();
-            model.Node("Log")
-                .Value("Level", "Information")
-                .Value("WriteToFile", true)
-                .Value("MaxDepth", 4);
-
-            JsonFormat jsonFormat = new();
-            string json = await jsonFormat.ExportAsync(model);
-
-            json.ShouldNotBeNullOrWhiteSpace();
-
-            _output.WriteLine(json);
-        }
-
-        [Fact]
         public async Task ImportTest()
         {
             string json = @"

@@ -61,7 +61,7 @@ namespace NStructuredDataModel.Yaml
         private static void SetScalarValue(AbstractNode parentNode, string propertyName, object? value)
         {
             //TODO: Should we validate the value here?
-            parentNode.AddOrUpdate(propertyName, value);
+            parentNode.AddOrUpdate(propertyName, new NodeValue(value));
         }
 
         /// <summary>
@@ -72,11 +72,11 @@ namespace NStructuredDataModel.Yaml
         private static AbstractNode SetObjectValue(AbstractNode parentNode, string propertyName)
         {
             // Check if node has a property with the specified property name.
-            if (parentNode.TryGetValue(propertyName, out object? value))
+            if (parentNode.TryGetValue(propertyName, out NodeValue value))
             {
                 // If the property is a variable node, that's fine.
-                if (value is AbstractNode node)
-                    return node;
+                if (value.ValueType == NodeValueType.Node)
+                    return value.AsNode();
 
                 // If the property is any other type, that means it's a scalar value and hence a
                 // leaf node. This should not be allowed.
@@ -85,13 +85,13 @@ namespace NStructuredDataModel.Yaml
 
             // If the property does not exist, add it as a variable node.
             var newProperty = new Node();
-            parentNode.Add(propertyName, newProperty);
+            parentNode.Add(propertyName, new NodeValue(newProperty));
             return newProperty;
         }
 
         private static void SetSequenceValue(AbstractNode parentNode, string propertyName, IList<YamlNode> children)
         {
-            if (parentNode.TryGetValue(propertyName, out object? value) && value is not AbstractNode)
+            if (parentNode.TryGetValue(propertyName, out NodeValue value) && value.ValueType != NodeValueType.Node)
                 throw new InvalidOperationException($"Property {propertyName} already exists, but it is a scalar value and not a variable node.");
 
             // Create a node for the sequence property

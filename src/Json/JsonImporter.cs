@@ -19,7 +19,7 @@ namespace NStructuredDataModel.Json
         {
             while (reader.Read())
             {
-                node.Add(Guid.NewGuid().ToString("N"), reader.TokenType.ToString());
+                node.Add(Guid.NewGuid().ToString("N"), new NodeValue(reader.TokenType.ToString()));
             }
         }
     }

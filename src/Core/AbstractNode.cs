@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace NStructuredDataModel
 {
     [Serializable]
-    public abstract partial class AbstractNode : Dictionary<string, object?>
+    public abstract partial class AbstractNode : Dictionary<string, NodeValue>
     {
         protected AbstractNode()
             : base(StringComparer.OrdinalIgnoreCase)
@@ -30,7 +30,7 @@ namespace NStructuredDataModel
 
             // To avoid guess-allocating arrays for each node, check if there is a "0" element, and
             // if so, then proceed with the assumption that it is an array.
-            if (!TryGetValue("0", out object? firstValue))
+            if (!TryGetValue("0", out NodeValue firstValue))
             {
                 array = Array.Empty<object?>();
                 return false;
@@ -38,15 +38,15 @@ namespace NStructuredDataModel
 
             // Create an array and populate the first item.
             array = new object?[Count];
-            array[0] = firstValue;
+            array[0] = firstValue.Value;
 
             // Proceed with populating the rest of the array until we determine it is not an array.
             int index = 1;
             while (index < Count)
             {
-                if (!TryGetValue(index.ToString(), out object? value))
+                if (!TryGetValue(index.ToString(), out NodeValue value))
                     return false;
-                array[index] = value;
+                array[index] = value.Value;
                 index++;
             }
 
@@ -55,7 +55,7 @@ namespace NStructuredDataModel
 
         public T? GetValue<T>(string propertyName, T? defaultValue = default)
         {
-            return TryGetValue(propertyName, out object? valueObject) ? (T?)valueObject : defaultValue;
+            return TryGetValue(propertyName, out NodeValue value) ? (T?)value.Value : defaultValue;
         }
 
         public T? Read<T>(ICollection<string> propertyPath, T? defaultValue)
@@ -82,7 +82,7 @@ namespace NStructuredDataModel
 
             AbstractNode parentNode = GetPropertyParentNode(propertyPath);
             string propertyName = propertyPath.Last();
-            parentNode.AddOrUpdate(propertyName, value);
+            parentNode.AddOrUpdate(propertyName, new NodeValue(value));
 
             return this;
         }
@@ -133,16 +133,16 @@ namespace NStructuredDataModel
                 propertyNameBuilder.Append(property);
 
                 // If the property does not have a value, create a new tree node.
-                if (!current.TryGetValue(property, out object? propertyValue))
+                if (!current.TryGetValue(property, out NodeValue propertyValue))
                 {
-                    propertyValue = new Node();
+                    propertyValue = new NodeValue(new Node());
                     current.Add(property, propertyValue);
                 }
 
                 // If the property value is not a Node, then it is a leaf node value. But
                 // that should not be the case here as we expect a parent node, which should be a
                 // VariableNode.
-                else if (propertyValue is not AbstractNode)
+                else if (propertyValue.ValueType != NodeValueType.Node)
                 {
                     string errorMessage =
                         $"The property {propertyNameBuilder} has already been assigned a scalar or array value. "
@@ -150,7 +150,7 @@ namespace NStructuredDataModel
                     throw new InvalidOperationException(errorMessage);
                 }
 
-                current = (Node)propertyValue;
+                current = propertyValue.AsNode();
             }
 
             return current;

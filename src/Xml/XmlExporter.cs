@@ -53,21 +53,20 @@ namespace NStructuredDataModel.Xml
             }
             else
             {
-                foreach ((string property, object? value) in node)
+                foreach ((string property, NodeValue value) in node)
                 {
                     string propertyName = !char.IsLetter(property[0]) ? $"_{property}" : property;
                     propertyName = _options.PropertyNameConverter?.Invoke(propertyName) ?? propertyName;
-                    switch (value)
+                    if (value.ValueType == NodeValueType.Node)
                     {
-                        case AbstractNode childNode:
-                            XElement childElement = new(propertyName);
-                            element.Add(childElement);
-                            ExportNode(childNode, childElement);
-                            break;
-                        default:
-                            XElement valueElement = new(propertyName, new XText(value?.ToString() ?? string.Empty));
-                            element.Add(valueElement);
-                            break;
+                        XElement childElement = new(propertyName);
+                        element.Add(childElement);
+                        ExportNode(value.AsNode(), childElement);
+                    }
+                    else
+                    {
+                        XElement valueElement = new(propertyName, new XText(value.Value?.ToString() ?? string.Empty));
+                        element.Add(valueElement);
                     }
                 }
             }

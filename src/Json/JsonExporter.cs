@@ -32,19 +32,19 @@ namespace NStructuredDataModel.Json
 
         private void ExportNode(AbstractNode node)
         {
-            foreach ((string property, object? value) in node)
+            foreach ((string property, NodeValue value) in node)
             {
                 string propertyName = _options.PropertyNameConverter?.Invoke(property) ?? property;
 
-                if (value is AbstractNode childNode)
+                if (value.ValueType == NodeValueType.Node)
                 {
                     _writer.WriteStartObject(propertyName);
-                    ExportNode(childNode);
+                    ExportNode(value.AsNode());
                     _writer.WriteEndObject();
                 }
                 else
                 {
-                    switch (value)
+                    switch (value.Value)
                     {
                         case string str:
                             _writer.WriteString(propertyName, str);
