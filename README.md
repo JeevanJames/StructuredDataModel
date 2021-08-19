@@ -16,12 +16,12 @@ Install-Package NStructuredDataModel
 
 There are separate packages to support importing from and exporting to various file formats:
 
-Format | Package
--------|--------
-JSON | [NStructuredDataModel.Json](https://nuget.org/packages/NStructuredDataModel.Json)
-XML | [NStructuredDataModel.Xml](https://nuget.org/packages/NStructuredDataModel.Xml)
-YAML | [NStructuredDataModel.Yaml](https://nuget.org/packages/NStructuredDataModel.Yaml)
-Key/value pairs | Coming soon
+Format | Supports | Package
+-------|----------|--------
+JSON | Import/Export | [NStructuredDataModel.Json](https://nuget.org/packages/NStructuredDataModel.Json)
+Key/value pairs | Export only | [NStructuredDataModel.KeyValuePairs](https://nuget.org/packages/NStructuredDataModel.KeyValuePairs)
+XML | Import/Export | [NStructuredDataModel.Xml](https://nuget.org/packages/NStructuredDataModel.Xml)
+YAML | Import/Export | [NStructuredDataModel.Yaml](https://nuget.org/packages/NStructuredDataModel.Yaml)
 
 ## Examples
 
