@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿// Copyright (c) 2021 Jeevan James
+// This file is licenses to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 

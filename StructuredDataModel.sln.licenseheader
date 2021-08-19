@@ -1,0 +1,12 @@
+﻿extensions: designer.cs generated.cs
+extensions: .cs
+// Copyright (c) 2021 Jeevan James
+// This file is licenses to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+extensions:  .xml .config .xsd
+<!--
+Copyright (c) 2021 Jeevan James
+This file is licenses to you under the MIT license.
+See the LICENSE file in the project root for more information.
+-->

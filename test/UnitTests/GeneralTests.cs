@@ -1,6 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿// Copyright (c) 2021 Jeevan James
+// This file is licenses to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Threading.Tasks;
 
 using NStructuredDataModel.Json;
+using NStructuredDataModel.KeyValuePairs;
 using NStructuredDataModel.Xml;
 using NStructuredDataModel.Yaml;
 
@@ -76,8 +81,18 @@ namespace NStructuredDataModel.UnitTests
             string xml = await xmlFormat.ExportAsync(model);
             xml.ShouldNotBeNullOrWhiteSpace();
 
+            KeyValuePairsFormat kvpFormat = new(new KeyValuePairsFormatOptions
+            {
+                PropertyNameSeparator = "__",
+                PropertyFormat = "ENV_{0}={1}",
+                PropertyNameConverter = NameConverters.PascalCase,
+            });
+            string kvp = await kvpFormat.ExportAsync(model);
+            kvp.ShouldNotBeNullOrWhiteSpace();
+
             _output.WriteLine(json);
             _output.WriteLine(xml);
+            _output.WriteLine(kvp);
         }
 
 #pragma warning disable SA1203 // Constants should appear before fields
