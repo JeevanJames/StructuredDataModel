@@ -16,12 +16,12 @@ Install-Package NStructuredDataModel
 
 There are separate packages to support importing from and exporting to various file formats:
 
-Format | Package
--------|--------
-JSON | [NStructuredDataModel.Json](https://nuget.org/packages/NStructuredDataModel.Json)
-XML | [NStructuredDataModel.Xml](https://nuget.org/packages/NStructuredDataModel.Xml)
-YAML | [NStructuredDataModel.Yaml](https://nuget.org/packages/NStructuredDataModel.Yaml)
-Key/value pairs | Coming soon
+Format | Supports | Package
+-------|----------|--------
+JSON | Import/Export | [NStructuredDataModel.Json](https://nuget.org/packages/NStructuredDataModel.Json)
+Key/value pairs | Export only | [NStructuredDataModel.KeyValuePairs](https://nuget.org/packages/NStructuredDataModel.KeyValuePairs)
+XML | Import/Export | [NStructuredDataModel.Xml](https://nuget.org/packages/NStructuredDataModel.Xml)
+YAML | Import/Export | [NStructuredDataModel.Yaml](https://nuget.org/packages/NStructuredDataModel.Yaml)
 
 ## Examples
 
@@ -36,9 +36,11 @@ Required packages:
 ```cs
 async Task<string> ConvertToJson(string yaml)
 {
+    // Import the YAML data
     var yamlFormat = new YamlFormat();
     StructuredDataModel model = await yamlFormat.ImportAsync(yaml);
 
+    // Export to JSON
     var jsonOptions = new JsonFormatOptions
     {
         PropertyNameConverter = PropertyNameConverters.PascalCase
@@ -60,11 +62,13 @@ Required packages:
 ```cs
 async Task<string> SaveStructureAsXml()
 {
+    // Create an in-memory structure
     var model = new StructuredDataModel();
     model.Write("Server.Host", "localhost");
     model.Write("Server.Port", 8080);
     model.Write("Server.UseProxy", true);
 
+    // Export to XML
     var xmlOptions = new XmlFormatOptions
     {
         PropertyNameConverter = NameConverters.CamelCase,
