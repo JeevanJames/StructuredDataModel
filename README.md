@@ -1,4 +1,9 @@
 # NStructuredDataModel
+
+[![CI](https://github.com/JeevanJames/StructuredDataModel/actions/workflows/ci.yml/badge.svg)](https://github.com/JeevanJames/StructuredDataModel/actions/workflows/ci.yml)
+[![NuGet Package](http://img.shields.io/nuget/v/NStructuredDataModel.svg?style=flat)](https://www.nuget.org/packages/NStructuredDataModel/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/NStructuredDataModel.svg)](https://www.nuget.org/packages/NStructuredDataModel/)
+
 NStructuredDataModel is a .NET framework that provides a generic object model to represents a hierarchial key/value structure.
 
 The framework also provides support for importing from and exporting to various compatible structured file formats like JSON, YAML and XML.
@@ -18,10 +23,10 @@ There are separate packages to support importing from and exporting to various f
 
 Format | Supports | Package
 -------|----------|--------
-JSON | Import/Export | [NStructuredDataModel.Json](https://nuget.org/packages/NStructuredDataModel.Json)
-Key/value pairs | Export only | [NStructuredDataModel.KeyValuePairs](https://nuget.org/packages/NStructuredDataModel.KeyValuePairs)
-XML | Import/Export | [NStructuredDataModel.Xml](https://nuget.org/packages/NStructuredDataModel.Xml)
-YAML | Import/Export | [NStructuredDataModel.Yaml](https://nuget.org/packages/NStructuredDataModel.Yaml)
+JSON | Import/Export | [![NuGet Package](http://img.shields.io/nuget/v/NStructuredDataModel.Json.svg?style=flat)](https://www.nuget.org/packages/NStructuredDataModel.Json/) [![NuGet Downloads](https://img.shields.io/nuget/dt/NStructuredDataModel.Json.svg)](https://www.nuget.org/packages/NStructuredDataModel.Json/)
+Key/value pairs | Export only | [![NuGet Package](http://img.shields.io/nuget/v/NStructuredDataModel.KeyValuePairs.svg?style=flat)](https://www.nuget.org/packages/NStructuredDataModel.KeyValuePairs/) [![NuGet Downloads](https://img.shields.io/nuget/dt/NStructuredDataModel.KeyValuePairs.svg)](https://www.nuget.org/packages/NStructuredDataModel.KeyValuePairs/)
+XML | Import/Export | [![NuGet Package](http://img.shields.io/nuget/v/NStructuredDataModel.Xml.svg?style=flat)](https://www.nuget.org/packages/NStructuredDataModel.Xml/) [![NuGet Downloads](https://img.shields.io/nuget/dt/NStructuredDataModel.Xml.svg)](https://www.nuget.org/packages/NStructuredDataModel.Xml/)
+YAML | Import/Export | [![NuGet Package](http://img.shields.io/nuget/v/NStructuredDataModel.Yaml.svg?style=flat)](https://www.nuget.org/packages/NStructuredDataModel.Yaml/) [![NuGet Downloads](https://img.shields.io/nuget/dt/NStructuredDataModel.Yaml.svg)](https://www.nuget.org/packages/NStructuredDataModel.Yaml/)
 
 ## Examples
 
