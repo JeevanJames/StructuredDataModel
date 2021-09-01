@@ -9,8 +9,20 @@ namespace NStructuredDataModel.KeyValuePairs
     public sealed class KeyValuePairsFormatOptions : StructuredDataFormatOptions
     {
         private string _propertyFormat = "{0}={1}";
+        private string _propertyNameSeparator = ".";
 
-        public string PropertyNameSeparator { get; set; } = ".";
+        public string PropertyNameSeparator
+        {
+            get => _propertyNameSeparator;
+            set
+            {
+                if (value is null)
+                    throw new ArgumentNullException(nameof(value));
+                if (value.Contains('='))
+                    throw new ArgumentException("Property name separator cannot contain the '=' character'.", nameof(value));
+                _propertyNameSeparator = value;
+            }
+        }
 
         public string PropertyFormat
         {
@@ -19,8 +31,6 @@ namespace NStructuredDataModel.KeyValuePairs
             {
                 if (value is null)
                     throw new ArgumentNullException(nameof(value));
-                if (value.Contains('='))
-                    throw new ArgumentException("Property format cannot contain the '=' character'.", nameof(value));
                 _propertyFormat = value;
             }
         }
