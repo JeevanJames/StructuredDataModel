@@ -1,5 +1,5 @@
 # NStructuredDataModel
-NStructuredDataModel is a .NET framework that provides a generic data model to represents a hierarchial key/value structure.
+NStructuredDataModel is a .NET framework that provides a generic object model to represents a hierarchial key/value structure.
 
 The framework also provides support for importing from and exporting to various compatible structured file formats like JSON, YAML and XML.
 
