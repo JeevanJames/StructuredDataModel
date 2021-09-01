@@ -1,15 +1,21 @@
 <?xml version="1.0"?>
-<!--
-Copyright (c) 2021 Jeevan James
-This file is licensed to you under the MIT license.
-See the LICENSE file in the project root for more information.
--->
-
 <doc>
     <assembly>
         <name>NStructuredDataModel</name>
     </assembly>
     <members>
+        <member name="M:NStructuredDataModel.AbstractNode.TryGetAsArray(System.Object[]@)">
+            <summary>
+                Attempts to get the children of the current node as an array. This will happen only
+                if there are keys that represent sequential numbers starting at zero.
+            </summary>
+            <param name="array">
+                The array of child items that have keys that represent sequential numbers.
+            </param>
+            <returns>
+                <c>True</c>, if an array could be obtained from the child nodes; otherwise <c>false</c>.
+            </returns>
+        </member>
         <member name="M:NStructuredDataModel.AbstractNode.GetPropertyParentNode(System.Collections.Generic.ICollection{System.String})">
             <summary>
                 Returns the parent of a property path in the Variable. If parts of the property

@@ -23,18 +23,19 @@ namespace NStructuredDataModel.KeyValuePairs
 
         public override async Task ExportAsync(TextWriter writer, AbstractNode node)
         {
-            string propertyNameSeparator = Options.PropertyNameSeparator ?? ".";
-            string propertyFormat = string.IsNullOrWhiteSpace(Options.PropertyFormat)
+            string propertyNameSeparator = Options.PropertyNameSeparator;
+            string propertyFormat = Options.PropertyFormat.Length == 0
                 ? "{0}={1}" : Options.PropertyFormat;
-            string newLine = Options.NewLine ?? Environment.NewLine;
+            string newLine = Options.NewLine;
 
-            await Traverse(node, _ => Task.CompletedTask, async (path, value) =>
+            await node.Traverse(valueVisitor: async (path, value) =>
             {
                 string propertyName = string.Join(propertyNameSeparator, path
                     .Select(p => Options.PropertyNameConverter?.Invoke(p) ?? p));
-                await writer.WriteAsync(string.Format(propertyFormat, propertyName, value ?? string.Empty));
-                await writer.WriteAsync(newLine);
-            });
+                await writer.WriteAsync(string.Format(propertyFormat, propertyName, value ?? string.Empty))
+                    .ConfigureAwait(false);
+                await writer.WriteAsync(newLine).ConfigureAwait(false);
+            }, recursive: true).ConfigureAwait(false);
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NStructuredDataModel
 {
@@ -24,6 +25,76 @@ namespace NStructuredDataModel
         {
         }
 
+        public Task Traverse(Func<IList<string>, Task>? nodeVisitor = null,
+            Func<IList<string>, object?, Task>? valueVisitor = null,
+            bool recursive = false)
+        {
+            return Traverse<object?>(null,
+                (path, _) => nodeVisitor?.Invoke(path) ?? Task.CompletedTask,
+                (path, value, _) => valueVisitor?.Invoke(path, value) ?? Task.CompletedTask,
+                recursive);
+        }
+
+        public Task Traverse<TState>(TState state = default!,
+            Func<IList<string>, TState, Task>? nodeVisitor = null,
+            Func<IList<string>, object?, TState, Task>? valueVisitor = null,
+            bool recursive = false)
+        {
+            List<string> path = new();
+            return TraverseRecursive(this, state, path, nodeVisitor, valueVisitor, recursive);
+        }
+
+        private async Task TraverseRecursive<TState>(AbstractNode node,
+            TState state,
+            List<string> path,
+            Func<IList<string>, TState, Task>? nodeVisitor,
+            Func<IList<string>, object?, TState, Task>? valueVisitor,
+            bool recursive)
+        {
+            foreach ((string key, NodeValue value) in node)
+            {
+                if (value.ValueType == NodeValueType.Node && recursive)
+                {
+                    if (nodeVisitor is not null)
+                        await nodeVisitor(path, state).ConfigureAwait(false);
+                    path.Add(key);
+                    await TraverseRecursive(value.AsNode(), state, path, nodeVisitor, valueVisitor, recursive)
+                        .ConfigureAwait(false);
+                }
+                else
+                {
+                    path.Add(key);
+                    if (valueVisitor is not null)
+                        await valueVisitor(path, value.Value, state).ConfigureAwait(false);
+                }
+
+                path.RemoveAt(path.Count - 1);
+            }
+        }
+
+        public async Task<IEnumerable<NodeEntryValue>> GetNodeEntryValues(bool recursive = false)
+        {
+            List<NodeEntryValue> values = new();
+            await Traverse(values, valueVisitor: (nodeKey, nodeValue, state) =>
+            {
+                state.Add(new NodeEntryValue(nodeKey, nodeValue));
+                return Task.CompletedTask;
+            }, recursive: recursive).ConfigureAwait(false);
+            return values;
+        }
+
+        /// <summary>
+        ///     Attempts to get the children of the current node as an array. This will happen only
+        ///     if there are keys that represent sequential numbers starting at zero.
+        /// </summary>
+        /// <param name="array">
+        ///     The array of child items that have keys that represent sequential numbers.
+        /// </param>
+        /// <returns>
+        ///     <c>True</c>, if an array could be obtained from the child nodes; otherwise <c>false</c>.
+        /// </returns>
+        //TODO: Add param to indicate whether to consider as an array if there are keys that are not
+        //numeric or that are numeric, but are not sequential (e.g. 0,1,2,4,5)
         public bool TryGetAsArray(out object?[] array)
         {
             if (Count == 0)
@@ -204,5 +275,18 @@ namespace NStructuredDataModel
             typeof(double),
             typeof(decimal),
         };
+    }
+
+    public sealed class NodeEntryValue
+    {
+        internal NodeEntryValue(IList<string> keyPath, object? value)
+        {
+            KeyPath = new List<string>(keyPath);
+            Value = value;
+        }
+
+        public IList<string> KeyPath { get; }
+
+        public object? Value { get; }
     }
 }
