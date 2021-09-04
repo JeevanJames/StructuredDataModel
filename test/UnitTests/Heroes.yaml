@@ -1,0 +1,19 @@
+﻿log:
+    level: Information
+    write_to_file: true
+    max_depth: 4
+settings:
+    default: 10
+    heroes:
+        -
+            name: Flash
+            power: Superspeed
+        -
+            name: Batman
+            power: ~
+        -
+            name: Ironman
+            power: Technology
+        -
+            name: Spiderman
+            power: Web slinging

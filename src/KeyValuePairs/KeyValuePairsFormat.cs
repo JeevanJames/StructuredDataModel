@@ -24,18 +24,29 @@ namespace NStructuredDataModel.KeyValuePairs
         public override async Task ExportAsync(TextWriter writer, AbstractNode node)
         {
             string propertyNameSeparator = Options.PropertyNameSeparator;
-            string propertyFormat = Options.PropertyFormat.Length == 0
-                ? "{0}={1}" : Options.PropertyFormat;
             string newLine = Options.NewLine;
 
             await node.Traverse(valueVisitor: async (path, value) =>
             {
                 string propertyName = string.Join(propertyNameSeparator, path
                     .Select(p => Options.PropertyNameConverter?.Invoke(p) ?? p));
-                await writer.WriteAsync(string.Format(propertyFormat, propertyName, value ?? string.Empty))
+                await writer.WriteAsync(string.Format("{0}={1}", propertyName, value ?? string.Empty))
                     .ConfigureAwait(false);
                 await writer.WriteAsync(newLine).ConfigureAwait(false);
             }, recursive: true).ConfigureAwait(false);
+        }
+
+        public override async Task ImportAsync(TextReader reader, AbstractNode node)
+        {
+            string? line = await reader.ReadLineAsync().ConfigureAwait(false);
+            while (line is not null)
+            {
+                string[] lineParts = line.Split(new[] { '=' }, 2, StringSplitOptions.None);
+                string? value = lineParts.Length == 1 ? null : lineParts[1];
+                node.Write(lineParts[0].Split(Options.PropertyNameSeparator), value);
+
+                line = await reader.ReadLineAsync().ConfigureAwait(false);
+            }
         }
     }
 }

@@ -4,15 +4,30 @@
         <RootNamespace>$(BaseNamespace).UnitTests</RootNamespace>
         <AssemblyName>$(RootNamespace)</AssemblyName>
         <DocumentationFile>Properties\$(AssemblyName).xml</DocumentationFile>
-        <Description>Jeevan James</Description>
+        <Description>NStructuredDataModel unit tests</Description>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Core\Core.csproj" />
-      <ProjectReference Include="..\..\src\Json\Json.csproj" />
-      <ProjectReference Include="..\..\src\KeyValuePairs\KeyValuePairs.csproj" />
-      <ProjectReference Include="..\..\src\Xml\Xml.csproj" />
-      <ProjectReference Include="..\..\src\Yaml\Yaml.csproj" />
+      <None Remove="LogSettings.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="AppSettings.json" />
+        <EmbeddedResource Include="AppSettings.kvp" />
+        <EmbeddedResource Include="Heroes.yaml" />
+        <EmbeddedResource Include="LogSettings.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Xunit.DataAttributes" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Core\Core.csproj" />
+        <ProjectReference Include="..\..\src\Json\Json.csproj" />
+        <ProjectReference Include="..\..\src\KeyValuePairs\KeyValuePairs.csproj" />
+        <ProjectReference Include="..\..\src\Xml\Xml.csproj" />
+        <ProjectReference Include="..\..\src\Yaml\Yaml.csproj" />
     </ItemGroup>
 
 </Project>

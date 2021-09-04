@@ -2,6 +2,8 @@
 // This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using NStructuredDataModel.Json;
@@ -13,6 +15,7 @@ using Shouldly;
 
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.DataAttributes;
 
 namespace NStructuredDataModel.UnitTests
 {
@@ -42,28 +45,43 @@ namespace NStructuredDataModel.UnitTests
             _output.WriteLine(json);
         }
 
-        [Fact]
-        public async Task ImportTest()
+        [Theory]
+        [EmbeddedResourceContent("NStructuredDataModel.UnitTests.Heroes.yaml")]
+        public async Task ImportTest(string yaml)
         {
-            string json = @"
-{
-    ""Logging"": {
-        ""Level"": ""Information""
-    },
-    ""MaxDiscount"": 10
-}";
-
-            JsonFormat jsonFormat = new();
-            StructuredDataModel model = await jsonFormat.ImportAsync(json);
+            YamlFormat yamlFormat = new();
+            StructuredDataModel model = await yamlFormat.ImportAsync(yaml);
 
             model.ShouldNotBeNull();
         }
 
-        [Fact]
-        public async Task ConvertFormatTest()
+        [Theory]
+        [EmbeddedResourceContent("NStructuredDataModel.UnitTests.Heroes.yaml")]
+        public async Task GetNodeEntryValuesTest(string json)
         {
             YamlFormat yamlFormat = new();
-            StructuredDataModel model = await yamlFormat.ImportAsync(Yaml);
+            StructuredDataModel model = await yamlFormat.ImportAsync(json);
+            List<NodeEntryValue> values = (await model.GetNodeEntryValues(true)).ToList();
+
+            values.Count.ShouldBe(12);
+        }
+
+        [Theory]
+        [EmbeddedResourceContent("NStructuredDataModel.UnitTests.AppSettings.kvp")]
+        public async Task ImportKeyValuePairsTest(string kvp)
+        {
+            KeyValuePairsFormat kvpFormat = new(new KeyValuePairsFormatOptions { PropertyNameSeparator = ":", });
+            StructuredDataModel model = await kvpFormat.ImportAsync(kvp);
+
+            model.ShouldNotBeNull();
+        }
+
+        [Theory]
+        [EmbeddedResourceContent("NStructuredDataModel.UnitTests.Heroes.yaml")]
+        public async Task ConvertFormatTest(string yaml)
+        {
+            YamlFormat yamlFormat = new();
+            StructuredDataModel model = await yamlFormat.ImportAsync(yaml);
 
             JsonFormat jsonFormat = new(new JsonFormatOptions
             {
@@ -84,7 +102,6 @@ namespace NStructuredDataModel.UnitTests
             KeyValuePairsFormat kvpFormat = new(new KeyValuePairsFormatOptions
             {
                 PropertyNameSeparator = "__",
-                PropertyFormat = "ENV_{0}={1}",
                 PropertyNameConverter = NameConverters.PascalCase,
             });
             string kvp = await kvpFormat.ExportAsync(model);
@@ -95,29 +112,21 @@ namespace NStructuredDataModel.UnitTests
             _output.WriteLine(kvp);
         }
 
-#pragma warning disable SA1203 // Constants should appear before fields
-        private const string Yaml = @"
-log:
-    level: Information
-    write_to_file: true
-    max_depth: 4
-settings:
-    default: 10
-    heroes:
-        -
-            name: Flash
-            power: Superspeed
-        -
-            name: Batman
-            power: ~
-        -
-            name: Ironman
-            power: Technology
-        -
-            name: Spiderman
-            power: ""Web slinging""
-";
-#pragma warning restore SA1203 // Constants should appear before fields
+        [Theory]
+        [EmbeddedResourceContent("NStructuredDataModel.UnitTests.LogSettings.xml")]
+        public async Task ImportXmlTest(string xml)
+        {
+            _output.WriteLine(xml);
 
+            XmlFormat xmlFormat = new(new XmlFormatOptions { PropertyNameConverter = NameConverters.PascalCase });
+            StructuredDataModel model = await xmlFormat.ImportAsync(xml);
+
+            model.ShouldNotBeNull();
+
+            JsonFormat jsonFormat = new();
+            string json = await jsonFormat.ExportAsync(model);
+
+            _output.WriteLine(json);
+        }
     }
 }

@@ -4,7 +4,9 @@
 
 using System;
 using System.IO;
+using System.Linq;
 
+using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
 namespace NStructuredDataModel.Yaml

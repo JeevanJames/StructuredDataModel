@@ -4,7 +4,9 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace NStructuredDataModel.Xml
@@ -25,9 +27,12 @@ namespace NStructuredDataModel.Xml
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public override Task ImportAsync(TextReader reader, AbstractNode node)
+        public override async Task ImportAsync(TextReader reader, AbstractNode node)
         {
-            throw new NotImplementedException();
+            XDocument xdoc = await XDocument.LoadAsync(reader, LoadOptions.None, CancellationToken.None)
+                .ConfigureAwait(false);
+            XmlImporter importer = new();
+            importer.Import(xdoc, node);
         }
 
         public override async Task ExportAsync(TextWriter writer, AbstractNode node)

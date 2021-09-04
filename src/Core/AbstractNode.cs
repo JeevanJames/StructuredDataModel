@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -181,10 +182,10 @@ namespace NStructuredDataModel
             if (propertyPath.Count == 0)
                 throw new ArgumentException("The property path cannot be empty.", nameof(propertyPath));
             if (propertyPath.Any(p => string.IsNullOrWhiteSpace(p) || !PropertyNamePattern.IsMatch(p)))
-                throw new ArgumentException("The specified property path is invalid.", nameof(propertyPath));
+                throw new ArgumentException("The specified property path contains invalid characters.", nameof(propertyPath));
         }
 
-        private static readonly Regex PropertyNamePattern = new(@"^[A-Za-z]\w*$",
+        private static readonly Regex PropertyNamePattern = new(@"^[A-Za-z_][\w\.-]*$",
             RegexOptions.Compiled | RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
 
         /// <summary>
@@ -277,6 +278,9 @@ namespace NStructuredDataModel
         };
     }
 
+#if DEBUG
+    [DebuggerDisplay("{DebuggerDisplay(),nq}")]
+#endif
     public sealed class NodeEntryValue
     {
         internal NodeEntryValue(IList<string> keyPath, object? value)
@@ -288,5 +292,17 @@ namespace NStructuredDataModel
         public IList<string> KeyPath { get; }
 
         public object? Value { get; }
+
+        public string KeyPathAsString(string nameSeparator)
+        {
+            return string.Join(nameSeparator, KeyPath);
+        }
+
+#if DEBUG
+        public string DebuggerDisplay()
+        {
+            return $"{KeyPathAsString(".")} = {Value ?? "<NULL>"}";
+        }
+#endif
     }
 }

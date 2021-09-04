@@ -1,0 +1,5 @@
+﻿AllowedHosts=*
+Kestrel:Endpoints:Http:Url=http://localhost:5001
+Logging:LogLevel:Default=Information
+Logging:LogLevel:Microsoft=Debug
+Logging:LogLevel:Microsoft.Hosting.Lifetime=Information
