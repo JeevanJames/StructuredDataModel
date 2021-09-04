@@ -26,6 +26,13 @@ namespace NStructuredDataModel
         {
         }
 
+        public AbstractNode AddNode(string key)
+        {
+            Node node = new();
+            Add(key, new NodeValue(node));
+            return node;
+        }
+
         public Task Traverse(Func<IList<string>, Task>? nodeVisitor = null,
             Func<IList<string>, object?, Task>? valueVisitor = null,
             bool recursive = false)

@@ -6,7 +6,7 @@ using System;
 
 namespace NStructuredDataModel.KeyValuePairs
 {
-    public sealed class KeyValuePairsFormatOptions : StructuredDataFormatOptions
+    public sealed class KeyValuePairsFormatOptions : FormatOptions
     {
         private string _propertyNameSeparator = ".";
 

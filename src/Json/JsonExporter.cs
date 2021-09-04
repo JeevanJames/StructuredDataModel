@@ -38,7 +38,7 @@ namespace NStructuredDataModel.Json
         {
             foreach ((string property, NodeValue value) in node)
             {
-                string propertyName = _options.PropertyNameConverter?.Invoke(property) ?? property;
+                string propertyName = _options.ConvertPropertyName(property);
 
                 if (value.ValueType == NodeValueType.Node)
                 {

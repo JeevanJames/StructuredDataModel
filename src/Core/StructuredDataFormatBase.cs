@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace NStructuredDataModel
 {
     public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
-        where TOptions : StructuredDataFormatOptions
+        where TOptions : FormatOptions
     {
         protected StructuredDataFormatBase(TOptions options)
         {

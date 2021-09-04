@@ -29,8 +29,8 @@ namespace NStructuredDataModel.KeyValuePairs
             await node.Traverse(valueVisitor: async (path, value) =>
             {
                 string propertyName = string.Join(propertyNameSeparator, path
-                    .Select(p => Options.PropertyNameConverter?.Invoke(p) ?? p));
-                await writer.WriteAsync(string.Format("{0}={1}", propertyName, value ?? string.Empty))
+                    .Select(p => Options.ConvertPropertyName(p)));
+                await writer.WriteAsync($"{propertyName}={value ?? string.Empty}")
                     .ConfigureAwait(false);
                 await writer.WriteAsync(newLine).ConfigureAwait(false);
             }, recursive: true).ConfigureAwait(false);

@@ -4,7 +4,7 @@
 
 namespace NStructuredDataModel.Xml
 {
-    public sealed class XmlFormatOptions : StructuredDataFormatOptions
+    public sealed class XmlFormatOptions : FormatOptions
     {
         public string? RootElementName { get; set; }
 

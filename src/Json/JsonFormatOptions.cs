@@ -4,7 +4,7 @@
 
 namespace NStructuredDataModel.Json
 {
-    public sealed class JsonFormatOptions : StructuredDataFormatOptions
+    public sealed class JsonFormatOptions : FormatOptions
     {
         public static readonly JsonFormatOptions Default = new();
     }

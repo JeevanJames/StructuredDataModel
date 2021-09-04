@@ -15,12 +15,8 @@ namespace NStructuredDataModel.Xml
         internal XmlExporter(XmlFormatOptions options)
         {
             _options = options;
-
-            _arrayElementName = _options.ArrayElementName ?? "Value";
-            _arrayElementName = _options.PropertyNameConverter?.Invoke(_arrayElementName) ?? _arrayElementName;
-
-            _rootElementName = _options.RootElementName ?? "Root";
-            _rootElementName = _options.PropertyNameConverter?.Invoke(_rootElementName) ?? _rootElementName;
+            _arrayElementName = _options.ConvertPropertyName(_options.ArrayElementName ?? "Value");
+            _rootElementName = _options.ConvertPropertyName(_options.RootElementName ?? "Root");
         }
 
         internal XDocument Export(AbstractNode node)
@@ -60,7 +56,7 @@ namespace NStructuredDataModel.Xml
                 foreach ((string property, NodeValue value) in node)
                 {
                     string propertyName = !char.IsLetter(property[0]) ? $"_{property}" : property;
-                    propertyName = _options.PropertyNameConverter?.Invoke(propertyName) ?? propertyName;
+                    propertyName = _options.ConvertPropertyName(propertyName);
                     if (value.ValueType == NodeValueType.Node)
                     {
                         XElement childElement = new(propertyName);
