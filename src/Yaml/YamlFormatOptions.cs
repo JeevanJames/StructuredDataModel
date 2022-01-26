@@ -2,10 +2,9 @@
 // This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace NStructuredDataModel.Yaml
+namespace NStructuredDataModel.Yaml;
+
+public sealed class YamlFormatOptions : FormatOptions
 {
-    public sealed class YamlFormatOptions : FormatOptions
-    {
-        public static readonly YamlFormatOptions Default = new();
-    }
+    public static readonly YamlFormatOptions Default = new();
 }

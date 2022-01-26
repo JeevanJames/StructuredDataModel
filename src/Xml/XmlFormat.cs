@@ -9,37 +9,36 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace NStructuredDataModel.Xml
+namespace NStructuredDataModel.Xml;
+
+public sealed class XmlFormat : StructuredDataFormatBase<XmlFormatOptions>
 {
-    public sealed class XmlFormat : StructuredDataFormatBase<XmlFormatOptions>
+    private readonly XmlFormatOptions _options;
+
+    public XmlFormat()
+        : base(XmlFormatOptions.Default)
     {
-        private readonly XmlFormatOptions _options;
+        _options = XmlFormatOptions.Default;
+    }
 
-        public XmlFormat()
-            : base(XmlFormatOptions.Default)
-        {
-            _options = XmlFormatOptions.Default;
-        }
+    public XmlFormat(XmlFormatOptions options)
+        : base(options)
+    {
+        _options = options ?? throw new ArgumentNullException(nameof(options));
+    }
 
-        public XmlFormat(XmlFormatOptions options)
-            : base(options)
-        {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-        }
+    public override async Task ImportAsync(TextReader reader, Node node)
+    {
+        XDocument xdoc = await XDocument.LoadAsync(reader, LoadOptions.None, CancellationToken.None)
+            .ConfigureAwait(false);
+        XmlImporter importer = new();
+        importer.Import(xdoc, node);
+    }
 
-        public override async Task ImportAsync(TextReader reader, AbstractNode node)
-        {
-            XDocument xdoc = await XDocument.LoadAsync(reader, LoadOptions.None, CancellationToken.None)
-                .ConfigureAwait(false);
-            XmlImporter importer = new();
-            importer.Import(xdoc, node);
-        }
-
-        public override async Task ExportAsync(TextWriter writer, AbstractNode node)
-        {
-            XmlExporter exporter = new(_options);
-            XDocument xdoc = exporter.Export(node);
-            await writer.WriteAsync(xdoc.ToString()).ConfigureAwait(false);
-        }
+    public override async Task ExportAsync(TextWriter writer, Node node)
+    {
+        XmlExporter exporter = new(_options);
+        XDocument xdoc = exporter.Export(node);
+        await writer.WriteAsync(xdoc.ToString()).ConfigureAwait(false);
     }
 }

@@ -2,14 +2,13 @@
 // This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace NStructuredDataModel.Xml
+namespace NStructuredDataModel.Xml;
+
+public sealed class XmlFormatOptions : FormatOptions
 {
-    public sealed class XmlFormatOptions : FormatOptions
-    {
-        public string? RootElementName { get; set; }
+    public string? RootElementName { get; set; }
 
-        public string? ArrayElementName { get; set; }
+    public string? ArrayElementName { get; set; }
 
-        public static readonly XmlFormatOptions Default = new();
-    }
+    public static readonly XmlFormatOptions Default = new();
 }

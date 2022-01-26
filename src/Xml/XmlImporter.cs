@@ -4,40 +4,39 @@
 
 using System.Xml.Linq;
 
-namespace NStructuredDataModel.Xml
-{
-    internal sealed class XmlImporter
-    {
-        internal void Import(XDocument xdoc, AbstractNode node)
-        {
-            if (xdoc.Root is not null)
-                Import(xdoc.Root, node);
-        }
+namespace NStructuredDataModel.Xml;
 
-        private static void Import(XElement element, AbstractNode node)
+internal sealed class XmlImporter
+{
+    internal void Import(XDocument xdoc, Node node)
+    {
+        if (xdoc.Root is not null)
+            Import(xdoc.Root, node);
+    }
+
+    private static void Import(XElement element, Node node)
+    {
+        foreach (XElement childElement in element.Elements())
         {
-            foreach (XElement childElement in element.Elements())
+            if (childElement.FirstNode is XText textElement)
+                node.TryAdd(childElement.Name.LocalName, DetectValue(textElement.Value));
+            else
             {
-                if (childElement.FirstNode is XText textElement)
-                    node.TryAdd(childElement.Name.LocalName, DetectValue(textElement.Value));
-                else
-                {
-                    Node childNode = new();
-                    node.Add(childElement.Name.LocalName, new NodeValue(childNode));
-                    Import(childElement, childNode);
-                }
+                Node childNode = new();
+                node.Add(childElement.Name.LocalName, new NodeValue(childNode));
+                Import(childElement, childNode);
             }
         }
+    }
 
-        private static NodeValue DetectValue(string value)
-        {
-            if (double.TryParse(value, out double doubleValue))
-                return new NodeValue(doubleValue);
-            if (long.TryParse(value, out long longValue))
-                return new NodeValue(longValue);
-            if (bool.TryParse(value, out bool boolValue))
-                return new NodeValue(boolValue);
-            return new NodeValue(value);
-        }
+    private static NodeValue DetectValue(string value)
+    {
+        if (double.TryParse(value, out double doubleValue))
+            return new NodeValue(doubleValue);
+        if (long.TryParse(value, out long longValue))
+            return new NodeValue(longValue);
+        if (bool.TryParse(value, out bool boolValue))
+            return new NodeValue(boolValue);
+        return new NodeValue(value);
     }
 }

@@ -5,18 +5,20 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace NStructuredDataModel
-{
-    [Serializable]
-    public sealed class StructuredDataModel : AbstractNode
-    {
-        public StructuredDataModel()
-        {
-        }
+namespace NStructuredDataModel;
 
-        private StructuredDataModel(SerializationInfo serializationInfo, StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
-        {
-        }
+/// <summary>
+///     Represents the root node of a structured data model.
+/// </summary>
+[Serializable]
+public sealed class StructuredDataModel : Node
+{
+    public StructuredDataModel()
+    {
+    }
+
+    private StructuredDataModel(SerializationInfo serializationInfo, StreamingContext streamingContext)
+        : base(serializationInfo, streamingContext)
+    {
     }
 }

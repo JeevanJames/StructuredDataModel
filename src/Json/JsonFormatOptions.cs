@@ -2,10 +2,9 @@
 // This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace NStructuredDataModel.Json
+namespace NStructuredDataModel.Json;
+
+public sealed class JsonFormatOptions : FormatOptions
 {
-    public sealed class JsonFormatOptions : FormatOptions
-    {
-        public static readonly JsonFormatOptions Default = new();
-    }
+    public static readonly JsonFormatOptions Default = new();
 }

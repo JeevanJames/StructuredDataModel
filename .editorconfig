@@ -215,3 +215,9 @@ dotnet_naming_style.underscore.required_prefix = _
 dotnet_naming_style.underscore.required_suffix =
 dotnet_naming_style.underscore.word_separator =
 dotnet_naming_style.underscore.capitalization = camel_case
+
+# Roslynator
+
+roslynator_accessibility_modifiers = explicit
+roslynator_enum_has_flag_style = method
+roslynator_object_creation_type_style = implicit_when_type_is_obvious

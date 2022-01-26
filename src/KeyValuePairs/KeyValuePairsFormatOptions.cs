@@ -4,27 +4,26 @@
 
 using System;
 
-namespace NStructuredDataModel.KeyValuePairs
+namespace NStructuredDataModel.KeyValuePairs;
+
+public sealed class KeyValuePairsFormatOptions : FormatOptions
 {
-    public sealed class KeyValuePairsFormatOptions : FormatOptions
+    private string _propertyNameSeparator = ".";
+
+    public string PropertyNameSeparator
     {
-        private string _propertyNameSeparator = ".";
-
-        public string PropertyNameSeparator
+        get => _propertyNameSeparator;
+        set
         {
-            get => _propertyNameSeparator;
-            set
-            {
-                if (value is null)
-                    throw new ArgumentNullException(nameof(value));
-                if (value.Contains('='))
-                    throw new ArgumentException("Property name separator cannot contain the '=' character'.", nameof(value));
-                _propertyNameSeparator = value;
-            }
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+            if (value.Contains('='))
+                throw new ArgumentException("Property name separator cannot contain the '=' character'.", nameof(value));
+            _propertyNameSeparator = value;
         }
-
-        public string NewLine { get; set; } = Environment.NewLine;
-
-        public static readonly KeyValuePairsFormatOptions Default = new();
     }
+
+    public string NewLine { get; set; } = Environment.NewLine;
+
+    public static readonly KeyValuePairsFormatOptions Default = new();
 }

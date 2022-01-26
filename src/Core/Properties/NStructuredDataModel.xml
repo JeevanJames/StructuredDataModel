@@ -4,7 +4,84 @@
         <name>NStructuredDataModel</name>
     </assembly>
     <members>
-        <member name="M:NStructuredDataModel.AbstractNode.TryGetAsArray(System.Object[]@)">
+        <member name="T:NStructuredDataModel.IStructuredDataFormat">
+            <summary>
+                Provides the ability to import/export a <see cref="T:NStructuredDataModel.Node"/> from/to a specific format like
+                JSON, XML, YAML, etc.
+            </summary>
+        </member>
+        <member name="M:NStructuredDataModel.IStructuredDataFormat.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node)">
+            <summary>
+                Imports the contents of the specified <see cref="T:System.IO.TextReader"/> <paramref name="reader"/>
+                into the specified <paramref name="node"/>.
+            </summary>
+            <param name="reader">The <see cref="T:System.IO.TextReader"/> whose contents are to be imported.</param>
+            <param name="node">The <see cref="T:NStructuredDataModel.Node"/> instance to import into.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:NStructuredDataModel.IStructuredDataFormat.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node)">
+            <summary>
+                Exports the contents of the specified <see cref="T:NStructuredDataModel.Node"/> into the specified <see cref="T:System.IO.TextWriter"/>.
+            </summary>
+            <param name="writer">The <see cref="T:System.IO.TextWriter"/> to export the node to.</param>
+            <param name="node">The <see cref="T:NStructuredDataModel.Node"/> to export.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="T:NStructuredDataModel.StructuredDataFormatExtensions">
+            <summary>
+                Provides commonly-used overloads to the <see cref="T:NStructuredDataModel.IStructuredDataFormat"/> methods, such
+                as importing/exporting directly from/to a string.
+            </summary>
+        </member>
+        <member name="M:NStructuredDataModel.StructuredDataFormatExtensions.ImportAsync(NStructuredDataModel.IStructuredDataFormat,System.String,NStructuredDataModel.Node)">
+            <summary>
+                Imports the contents of the specified string <paramref name="data"/> into the specified
+                <see cref="T:NStructuredDataModel.Node"/> instance.
+            </summary>
+            <param name="format">The <see cref="T:NStructuredDataModel.IStructuredDataFormat"/> instance.</param>
+            <param name="data">The string to import.</param>
+            <param name="node">The <see cref="T:NStructuredDataModel.Node"/> instance to import into.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="T:NStructuredDataModel.Node">
+            <summary>
+                Represents a node in the structured data model. Nodes can have named values and child nodes.
+            </summary>
+        </member>
+        <member name="M:NStructuredDataModel.Node.AddNode(System.String)">
+            <summary>
+                Adds a child node to the current node.
+            </summary>
+            <param name="key">The name of the child node.</param>
+            <returns>A reference to the newly-created child node.</returns>
+            <exception cref="T:System.ArgumentException">
+                Thrown if <paramref name="key"/> is <c>null</c> or whitespace.
+            </exception>
+        </member>
+        <member name="M:NStructuredDataModel.Node.Traverse(System.Func{System.Collections.Generic.IList{System.String},System.Threading.Tasks.Task},System.Func{System.Collections.Generic.IList{System.String},System.Object,System.Threading.Tasks.Task},System.Boolean)">
+            <summary>
+                Traverses the current node.
+            </summary>
+            <param name="nodeVisitor">Optional delegate to execute whenever a node is visited.</param>
+            <param name="valueVisitor">
+                Optional delegate to execute whenever a node value is visited.
+            </param>
+            <param name="recursive">Indicates whether to traverse recursively into child nodes.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:NStructuredDataModel.Node.Traverse``1(``0,System.Func{System.Collections.Generic.IList{System.String},``0,System.Threading.Tasks.Task},System.Func{System.Collections.Generic.IList{System.String},System.Object,``0,System.Threading.Tasks.Task},System.Boolean)">
+            <summary>
+                Traverses the current node.
+            </summary>
+            <param name="state">Custom state data to be passed into the visitor delegates.</param>
+            <param name="nodeVisitor">Optional delegate to execute whenever a node is visited.</param>
+            <param name="valueVisitor">
+                Optional delegate to execute whenever a node value is visited.
+            </param>
+            <param name="recursive">Indicates whether to traverse recursively into child nodes.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:NStructuredDataModel.Node.TryGetAsArray(System.Object[]@)">
             <summary>
                 Attempts to get the children of the current node as an array. This will happen only
                 if there are keys that represent sequential numbers starting at zero.
@@ -16,10 +93,56 @@
                 <c>True</c>, if an array could be obtained from the child nodes; otherwise <c>false</c>.
             </returns>
         </member>
-        <member name="M:NStructuredDataModel.AbstractNode.GetPropertyParentNode(System.Collections.Generic.ICollection{System.String})">
+        <member name="M:NStructuredDataModel.Node.GetPropertyParentNode(System.Collections.Generic.ICollection{System.String})">
             <summary>
                 Returns the parent of a property path in the Variable. If parts of the property
                 tree do not exist, then they will be created.
+            </summary>
+        </member>
+        <member name="P:NStructuredDataModel.NodeValue.ObjectValue">
+            <summary>
+                Gets the original value of this node.
+            </summary>
+        </member>
+        <member name="P:NStructuredDataModel.NodeValue.Value">
+            <summary>
+                Gets the string representation of the value of this node.
+            </summary>
+        </member>
+        <member name="P:NStructuredDataModel.NodeValue.IsNode">
+            <summary>
+                Gets a value indicating whether this node value contains a node.
+            </summary>
+        </member>
+        <member name="P:NStructuredDataModel.NodeValue.IsValue">
+            <summary>
+                Gets a value indicating whether this node value is a value and not a node.
+            </summary>
+        </member>
+        <member name="M:NStructuredDataModel.NodeValue.As``1">
+            <summary>
+                Attempts to convert the node value to the specified type.
+            </summary>
+            <typeparam name="T">The type to convert the node value to.</typeparam>
+            <returns>The value of the node converted to the specified type.</returns>
+        </member>
+        <member name="T:NStructuredDataModel.StructuredDataFormatBase`1">
+            <summary>
+                Abstract base class for creating <see cref="T:NStructuredDataModel.IStructuredDataFormat"/> classes. This base
+                class provides support for options and provides sync versions of the <see cref="M:NStructuredDataModel.StructuredDataFormatBase`1.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node)"/>
+                and <see cref="M:NStructuredDataModel.StructuredDataFormatBase`1.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node)"/> methods.
+            </summary>
+            <typeparam name="TOptions">The type of the format options.</typeparam>
+        </member>
+        <member name="M:NStructuredDataModel.StructuredDataFormatBase`1.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node)">
+            <inheritdoc />
+        </member>
+        <member name="M:NStructuredDataModel.StructuredDataFormatBase`1.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node)">
+            <inheritdoc />
+        </member>
+        <member name="T:NStructuredDataModel.StructuredDataModel">
+            <summary>
+                Represents the root node of a structured data model.
             </summary>
         </member>
     </members>

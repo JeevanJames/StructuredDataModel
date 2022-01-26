@@ -4,17 +4,16 @@
 
 using System;
 
-namespace NStructuredDataModel
-{
-    public class FormatOptions
-    {
-        public Converter<string, string>? PropertyNameConverter { get; set; }
+namespace NStructuredDataModel;
 
-        public string ConvertPropertyName(string propertyName)
-        {
-            if (propertyName is null)
-                throw new ArgumentNullException(nameof(propertyName));
-            return PropertyNameConverter?.Invoke(propertyName) ?? propertyName;
-        }
+public class FormatOptions
+{
+    public Converter<string, string>? PropertyNameConverter { get; set; }
+
+    public string ConvertPropertyName(string propertyName)
+    {
+        if (propertyName is null)
+            throw new ArgumentNullException(nameof(propertyName));
+        return PropertyNameConverter?.Invoke(propertyName) ?? propertyName;
     }
 }

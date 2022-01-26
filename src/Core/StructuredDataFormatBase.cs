@@ -6,38 +6,45 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace NStructuredDataModel
+namespace NStructuredDataModel;
+
+/// <summary>
+///     Abstract base class for creating <see cref="IStructuredDataFormat"/> classes. This base
+///     class provides support for options and provides sync versions of the <see cref="ImportAsync"/>
+///     and <see cref="ExportAsync"/> methods.
+/// </summary>
+/// <typeparam name="TOptions">The type of the format options.</typeparam>
+public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
+    where TOptions : FormatOptions
 {
-    public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
-        where TOptions : FormatOptions
+    protected StructuredDataFormatBase(TOptions options)
     {
-        protected StructuredDataFormatBase(TOptions options)
-        {
-            Options = options;
-        }
+        Options = options ?? throw new ArgumentNullException(nameof(options));
+    }
 
-        public TOptions Options { get; }
+    public TOptions Options { get; }
 
-        public virtual Task ImportAsync(TextReader reader, AbstractNode node)
-        {
-            Import(reader, node);
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc />
+    public virtual Task ImportAsync(TextReader reader, Node node)
+    {
+        Import(reader, node);
+        return Task.CompletedTask;
+    }
 
-        protected virtual void Import(TextReader reader, AbstractNode node)
-        {
-            throw new NotImplementedException();
-        }
+    protected virtual void Import(TextReader reader, Node node)
+    {
+        throw new NotImplementedException();
+    }
 
-        public virtual Task ExportAsync(TextWriter writer, AbstractNode node)
-        {
-            Export(writer, node);
-            return Task.CompletedTask;
-        }
+    /// <inheritdoc />
+    public virtual Task ExportAsync(TextWriter writer, Node node)
+    {
+        Export(writer, node);
+        return Task.CompletedTask;
+    }
 
-        protected virtual void Export(TextWriter writer, AbstractNode node)
-        {
-            throw new NotImplementedException();
-        }
+    protected virtual void Export(TextWriter writer, Node node)
+    {
+        throw new NotImplementedException();
     }
 }

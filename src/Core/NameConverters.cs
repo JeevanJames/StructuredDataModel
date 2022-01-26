@@ -6,20 +6,19 @@ using System;
 
 using Humanizer;
 
-namespace NStructuredDataModel
+namespace NStructuredDataModel;
+
+public static class NameConverters
 {
-    public static class NameConverters
-    {
-        public static readonly Converter<string, string> PascalCase = s => s.Pascalize();
+    public static readonly Converter<string, string> PascalCase = s => s.Pascalize();
 
-        public static readonly Converter<string, string> CamelCase = s => s.Camelize();
+    public static readonly Converter<string, string> CamelCase = s => s.Camelize();
 
-        public static readonly Converter<string, string> KebabCase = s => s.Kebaberize();
+    public static readonly Converter<string, string> KebabCase = s => s.Kebaberize();
 
-        public static readonly Converter<string, string> SnakeCase = s => s.Underscore();
+    public static readonly Converter<string, string> SnakeCase = s => s.Underscore();
 
-        public static readonly Converter<string, string> AllCaps = s => s.Pascalize().ApplyCase(LetterCasing.AllCaps);
+    public static readonly Converter<string, string> AllCaps = s => s.Pascalize().ApplyCase(LetterCasing.AllCaps);
 
-        public static readonly Converter<string, string> AllLower = s => s.Pascalize().ApplyCase(LetterCasing.LowerCase);
-    }
+    public static readonly Converter<string, string> AllLower = s => s.Pascalize().ApplyCase(LetterCasing.LowerCase);
 }

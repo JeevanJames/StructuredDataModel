@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6431E5FF-901A-4F01-A440-AAD5231002C0}"
 EndProject
@@ -25,7 +25,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yaml", "src\Yaml\Yaml.cspro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xml", "src\Xml\Xml.csproj", "{EC3155ED-23B4-4AF3-9310-BCA05BC21E15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyValuePairs", "src\KeyValuePairs\KeyValuePairs.csproj", "{6E1898E3-6C49-4EAE-A5F8-315E39F002C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyValuePairs", "src\KeyValuePairs\KeyValuePairs.csproj", "{6E1898E3-6C49-4EAE-A5F8-315E39F002C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{5DD5A4ED-F2A7-41E6-81F3-919D37BDECB4}"
+	ProjectSection(SolutionItems) = preProject
+		test\Directory.Build.props = test\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3A9AA901-4C1C-4E98-AA39-E73927677F3A}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -120,6 +130,8 @@ Global
 		{01001B44-E93D-4C70-8AC7-97DDCF2E82A0} = {6431E5FF-901A-4F01-A440-AAD5231002C0}
 		{EC3155ED-23B4-4AF3-9310-BCA05BC21E15} = {6431E5FF-901A-4F01-A440-AAD5231002C0}
 		{6E1898E3-6C49-4EAE-A5F8-315E39F002C4} = {6431E5FF-901A-4F01-A440-AAD5231002C0}
+		{5DD5A4ED-F2A7-41E6-81F3-919D37BDECB4} = {082D4D6E-D28F-47F2-B635-34CC616A124F}
+		{3A9AA901-4C1C-4E98-AA39-E73927677F3A} = {082D4D6E-D28F-47F2-B635-34CC616A124F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1BA0FF7-3E3A-4960-8FD9-69545A88BDB3}
