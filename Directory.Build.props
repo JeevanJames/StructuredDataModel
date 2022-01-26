@@ -16,20 +16,13 @@
         <Authors>Jeevan James</Authors>
         <Company>Jeevan James</Company>
         <Product>NStructuredDataModel</Product>
-        <Copyright>Copyright (c) 2021 Jeevan James</Copyright>
+        <Copyright>Copyright (c) 2021-2022 Jeevan James</Copyright>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/JeevanJames/StructuredDataModel</PackageProjectUrl>
         <RepositoryUrl>https://github.com/JeevanJames/StructuredDataModel.git</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <PackageTags>structured-data-model json yaml xml</PackageTags>
         <NeutralLanguage>en-US</NeutralLanguage>
-
-        <!-- SourceLink properties-->
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)StructuredDataModel.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
@@ -40,10 +33,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -60,4 +49,5 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
+
 </Project>
