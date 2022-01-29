@@ -2,7 +2,6 @@
 // This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +40,7 @@ public sealed class KeyValuePairsFormat : StructuredDataFormatBase<KeyValuePairs
         string? line = await reader.ReadLineAsync().ConfigureAwait(false);
         while (line is not null)
         {
-            string[] lineParts = line.Split(new[] { '=' }, 2, StringSplitOptions.None);
+            string[] lineParts = line.Split('=', 2);
             string? value = lineParts.Length == 1 ? null : lineParts[1];
             node.Write(lineParts[0].Split(Options.PropertyNameSeparator), value);
 
