@@ -3,11 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace NStructuredDataModel;
 
+/// <summary>
+///     Represents a <see cref="Node"/> value. This can be an object value (must be convertable to
+///     and from string) or another Node, forming a hierarchy.
+/// </summary>
 public readonly struct NodeValue
 {
     private readonly Node? _node;

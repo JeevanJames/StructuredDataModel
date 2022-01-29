@@ -4,6 +4,36 @@
         <name>NStructuredDataModel</name>
     </assembly>
     <members>
+        <member name="T:NStructuredDataModel.FormatOptions">
+            <summary>
+                Represents the base options for a <see cref="T:NStructuredDataModel.IStructuredDataFormat" />. The base options specifies
+                how to convert .NET property names to a specific format's property name (e.g. JSON properties
+                or YAML properties).
+                <para />
+                Concrete formats can derive their own options from this class to add more capabilities specific
+                to the format.
+            </summary>
+        </member>
+        <member name="P:NStructuredDataModel.FormatOptions.PropertyNameConverter">
+            <summary>
+                Gets or sets an optional converter delegate to convert from the .NET property names in
+                the <see cref="T:NStructuredDataModel.Node" /> instances to a format's property name.
+            </summary>
+        </member>
+        <member name="M:NStructuredDataModel.FormatOptions.ConvertPropertyName(System.String)">
+            <summary>
+                Shortcut method to use the <see cref="P:NStructuredDataModel.FormatOptions.PropertyNameConverter" /> to convert from the .NET
+                property names in the <see cref="T:NStructuredDataModel.Node" /> instances to a format's property name.
+            </summary>
+            <param name="propertyName">The property name to convert.</param>
+            <returns>
+                The converted property name, if a converter is specified, otherwise the original property
+                name itself.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown if the <paramref name="propertyName" /> is <c>null</c>.
+            </exception>
+        </member>
         <member name="T:NStructuredDataModel.IStructuredDataFormat">
             <summary>
                 Provides the ability to import/export a <see cref="T:NStructuredDataModel.Node"/> from/to a specific format like
@@ -97,6 +127,12 @@
             <summary>
                 Returns the parent of a property path in the Variable. If parts of the property
                 tree do not exist, then they will be created.
+            </summary>
+        </member>
+        <member name="T:NStructuredDataModel.NodeValue">
+            <summary>
+                Represents a <see cref="T:NStructuredDataModel.Node"/> value. This can be an object value (must be convertable to
+                and from string) or another Node, forming a hierarchy.
             </summary>
         </member>
         <member name="P:NStructuredDataModel.NodeValue.ObjectValue">
