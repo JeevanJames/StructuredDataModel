@@ -215,6 +215,22 @@ public partial class Node : Dictionary<string, NodeValue>
         return Write(propertyPath, value);
     }
 
+    public Node WriteNode(ICollection<string> nodePath)
+    {
+        ValidatePropertyPath(nodePath);
+        GetOrCreateNodePath(nodePath);
+        return this;
+    }
+
+    public Node WriteNode(string nodePath)
+    {
+        if (nodePath is null)
+            throw new ArgumentNullException(nameof(nodePath));
+
+        string[] pathParts = nodePath.Split('.', StringSplitOptions.RemoveEmptyEntries);
+        return WriteNode(pathParts);
+    }
+
     private static void ValidatePropertyPath(ICollection<string> propertyPath)
     {
         if (propertyPath is null)
@@ -225,51 +241,55 @@ public partial class Node : Dictionary<string, NodeValue>
             throw new ArgumentException("The specified property path contains invalid characters.", nameof(propertyPath));
     }
 
-    private static readonly Regex PropertyNamePattern = new(@"^[0-9A-Za-z_][\w\.-]*$",
+    private static readonly Regex PropertyNamePattern = new(@"^[0-9A-Za-z_][\w\.-_]*$",
         RegexOptions.Compiled | RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
+
+    private Node GetOrCreateNodePath(IEnumerable<string> nodePath)
+    {
+        // This StringBuilder is used just to construct the error message.
+        StringBuilder currentPathName = new();
+
+        // Start traversal at the root object in the variable. If this is for a root property
+        // (propertyPath is empty), then the Variable.Data property is returned.
+        Node currentNode = this;
+
+        foreach (string nodePathItem in nodePath)
+        {
+            // Build up the property name up to the current property in the traversal.
+            if (currentPathName.Length > 0)
+                currentPathName.Append('.');
+            currentPathName.Append(nodePathItem);
+
+            // If the property does not have a value, create a new tree node.
+            if (!currentNode.TryGetValue(nodePathItem, out NodeValue nodeValue))
+            {
+                nodeValue = new NodeValue(new Node());
+                currentNode.Add(nodePathItem, nodeValue);
+            }
+
+            // The existing property cannot be a value, since we're traversing to SkipLast(1) and hence
+            // every node in the traversal should be a Node.
+            else if (!nodeValue.IsNode)
+            {
+                string errorMessage =
+                    $"The property {currentPathName} has already been assigned a scalar or array value. "
+                    + "It cannot be a Node object.";
+                throw new InvalidOperationException(errorMessage);
+            }
+
+            currentNode = nodeValue.AsNode();
+        }
+
+        return currentNode;
+    }
 
     /// <summary>
     ///     Returns the parent of a property path in the Variable. If parts of the property
     ///     tree do not exist, then they will be created.
     /// </summary>
-    private Node GetPropertyParentNode(ICollection<string> propertyPath)
+    private Node GetPropertyParentNode(IEnumerable<string> propertyPath)
     {
-        // This StringBuilder is used just to construct the error message.
-        StringBuilder propertyNameBuilder = new();
-
-        // Start traversal at the root object in the variable. If this is for a root property
-        // (propertyPath is empty), then the Variable.Data property is returned.
-        Node current = this;
-
-        foreach (string property in propertyPath.SkipLast(1))
-        {
-            // Build up the property name up to the current property in the traversal.
-            if (propertyNameBuilder.Length > 0)
-                propertyNameBuilder.Append('.');
-            propertyNameBuilder.Append(property);
-
-            // If the property does not have a value, create a new tree node.
-            if (!current.TryGetValue(property, out NodeValue propertyValue))
-            {
-                propertyValue = new NodeValue(new Node());
-                current.Add(property, propertyValue);
-            }
-
-            // If the property value is not a Node, then it is a leaf node value. But
-            // that should not be the case here as we expect a parent node, which should be a
-            // VariableNode.
-            else if (!propertyValue.IsNode)
-            {
-                string errorMessage =
-                    $"The property {propertyNameBuilder} has already been assigned a scalar or array value. "
-                    + "It cannot be a complex object.";
-                throw new InvalidOperationException(errorMessage);
-            }
-
-            current = propertyValue.AsNode();
-        }
-
-        return current;
+        return GetOrCreateNodePath(propertyPath.SkipLast(1));
     }
 
     private static void ValidatePropertyValue(object? value)

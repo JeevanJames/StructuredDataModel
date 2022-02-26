@@ -123,7 +123,7 @@
                 <c>True</c>, if an array could be obtained from the child nodes; otherwise <c>false</c>.
             </returns>
         </member>
-        <member name="M:NStructuredDataModel.Node.GetPropertyParentNode(System.Collections.Generic.ICollection{System.String})">
+        <member name="M:NStructuredDataModel.Node.GetPropertyParentNode(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
                 Returns the parent of a property path in the Variable. If parts of the property
                 tree do not exist, then they will be created.

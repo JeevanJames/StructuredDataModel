@@ -36,13 +36,19 @@ public sealed class GeneralTests
             .Write("Log.WriteToFile", true)
             .Write("Log.MaxDepth", 4)
             .Write("Settings.Default", (byte)10);
+        model.WriteNode("Security.Authentication");
 
         JsonFormat jsonFormat = new();
         string json = await jsonFormat.ExportAsync(model);
 
         json.ShouldNotBeNullOrWhiteSpace();
-
         _output.WriteLine(json);
+
+        XmlFormat xmlFormat = new();
+        string xml = await xmlFormat.ExportAsync(model);
+
+        xml.ShouldNotBeNullOrWhiteSpace();
+        _output.WriteLine(xml);
     }
 
     [Theory]

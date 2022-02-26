@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace NStructuredDataModel;
 
 /// <summary>
-///     Provides the ability to import/export a <see cref="Node"/> from/to a specific format like
-///     JSON, XML, YAML, etc.
+///     Provides the ability to import/export a <see cref="Node"/> from/to a specific format like that
+///     supports hierarchical data such as JSON, XML, YAML, etc.
 /// </summary>
 public interface IStructuredDataFormat
 {

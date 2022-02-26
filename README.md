@@ -19,7 +19,7 @@ dotnet add package NStructuredDataModel
 Install-Package NStructuredDataModel
 ```
 
-There are separate packages to support importing from and exporting to various file formats:
+There are separate packages to support importing from and exporting to various structured file formats:
 
 Format | Supports | Package
 -------|----------|--------
