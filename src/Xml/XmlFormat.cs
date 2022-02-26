@@ -27,18 +27,17 @@ public sealed class XmlFormat : StructuredDataFormatBase<XmlFormatOptions>
         _options = options ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public override async Task ImportAsync(TextReader reader, Node node)
+    public override async Task ImportAsync(TextReader reader, Node node, CancellationToken cancellationToken = default)
     {
-        XDocument xdoc = await XDocument.LoadAsync(reader, LoadOptions.None, CancellationToken.None)
+        XDocument xdoc = await XDocument.LoadAsync(reader, LoadOptions.None, cancellationToken)
             .ConfigureAwait(false);
-        XmlImporter importer = new();
-        importer.Import(xdoc, node);
+        XmlImporter.Import(xdoc, node, cancellationToken);
     }
 
-    public override async Task ExportAsync(TextWriter writer, Node node)
+    public override async Task ExportAsync(TextWriter writer, Node node, CancellationToken cancellationToken = default)
     {
         XmlExporter exporter = new(_options);
-        XDocument xdoc = exporter.Export(node);
+        XDocument xdoc = exporter.Export(node, cancellationToken);
         await writer.WriteAsync(xdoc.ToString()).ConfigureAwait(false);
     }
 }

@@ -4,25 +4,27 @@
 
 using System;
 using System.Text.Json;
+using System.Threading;
 
 namespace NStructuredDataModel.Json;
 
-internal sealed class JsonImporter
+internal static class JsonImporter
 {
-    internal void Import(Node node, ReadOnlySpan<byte> jsonBytes)
+    internal static void Import(Node node, ReadOnlySpan<byte> jsonBytes, CancellationToken cancellationToken)
     {
         Utf8JsonReader reader = new(jsonBytes, new JsonReaderOptions
         {
             AllowTrailingCommas = true,
             CommentHandling = JsonCommentHandling.Skip,
         });
-        ImportNode(node, reader);
+        ImportNode(node, reader, cancellationToken);
     }
 
-    private static void ImportNode(Node node, Utf8JsonReader reader)
+    private static void ImportNode(Node node, Utf8JsonReader reader, CancellationToken cancellationToken)
     {
         while (reader.Read())
         {
+            cancellationToken.ThrowIfCancellationRequested();
             node.Add(Guid.NewGuid().ToString("N"), new NodeValue(reader.TokenType.ToString()));
         }
     }

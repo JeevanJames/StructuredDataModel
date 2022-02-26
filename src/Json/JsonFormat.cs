@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NStructuredDataModel.Json;
@@ -21,19 +22,18 @@ public sealed class JsonFormat : StructuredDataFormatBase<JsonFormatOptions>
     {
     }
 
-    public override async Task ExportAsync(TextWriter writer, Node node)
+    public override async Task ExportAsync(TextWriter writer, Node node, CancellationToken cancellationToken = default)
     {
         await using JsonExporter exporter = new(Options);
-        ReadOnlyMemory<char> json = await exporter.ExportAsync(node).ConfigureAwait(false);
-        await writer.WriteAsync(json).ConfigureAwait(false);
+        ReadOnlyMemory<char> json = await exporter.ExportAsync(node, cancellationToken).ConfigureAwait(false);
+        await writer.WriteAsync(json, cancellationToken).ConfigureAwait(false);
     }
 
-    public override async Task ImportAsync(TextReader reader, Node node)
+    public override async Task ImportAsync(TextReader reader, Node node, CancellationToken cancellationToken = default)
     {
         string json = await reader.ReadToEndAsync().ConfigureAwait(false);
         byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
-        JsonImporter importer = new();
-        importer.Import(node, jsonBytes);
+        JsonImporter.Import(node, jsonBytes, cancellationToken);
     }
 }

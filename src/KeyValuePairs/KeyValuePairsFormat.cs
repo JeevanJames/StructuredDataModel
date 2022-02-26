@@ -4,6 +4,7 @@
 
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NStructuredDataModel.KeyValuePairs;
@@ -20,13 +21,15 @@ public sealed class KeyValuePairsFormat : StructuredDataFormatBase<KeyValuePairs
     {
     }
 
-    public override async Task ExportAsync(TextWriter writer, Node node)
+    public override async Task ExportAsync(TextWriter writer, Node node, CancellationToken cancellationToken = default)
     {
         string propertyNameSeparator = Options.PropertyNameSeparator;
         string newLine = Options.NewLine;
 
         await node.Traverse(valueVisitor: async (path, value) =>
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             string propertyName = string.Join(propertyNameSeparator, path
                 .Select(p => Options.ConvertPropertyName(p)));
             await writer.WriteAsync($"{propertyName}={value ?? string.Empty}")
@@ -35,11 +38,13 @@ public sealed class KeyValuePairsFormat : StructuredDataFormatBase<KeyValuePairs
         }, recursive: true).ConfigureAwait(false);
     }
 
-    public override async Task ImportAsync(TextReader reader, Node node)
+    public override async Task ImportAsync(TextReader reader, Node node, CancellationToken cancellationToken = default)
     {
         string? line = await reader.ReadLineAsync().ConfigureAwait(false);
         while (line is not null)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             string[] lineParts = line.Split('=', 2);
             string? value = lineParts.Length == 1 ? null : lineParts[1];
             node.Write(lineParts[0].Split(Options.PropertyNameSeparator), value);

@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NStructuredDataModel;
@@ -25,7 +26,7 @@ public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
     public TOptions Options { get; }
 
     /// <inheritdoc />
-    public virtual Task ImportAsync(TextReader reader, Node node)
+    public virtual Task ImportAsync(TextReader reader, Node node, CancellationToken cancellationToken = default)
     {
         Import(reader, node);
         return Task.CompletedTask;
@@ -37,7 +38,7 @@ public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
     }
 
     /// <inheritdoc />
-    public virtual Task ExportAsync(TextWriter writer, Node node)
+    public virtual Task ExportAsync(TextWriter writer, Node node, CancellationToken cancellationToken = default)
     {
         Export(writer, node);
         return Task.CompletedTask;

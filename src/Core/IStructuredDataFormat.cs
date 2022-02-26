@@ -4,6 +4,7 @@
 
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NStructuredDataModel;
@@ -20,16 +21,18 @@ public interface IStructuredDataFormat
     /// </summary>
     /// <param name="reader">The <see cref="TextReader"/> whose contents are to be imported.</param>
     /// <param name="node">The <see cref="Node"/> instance to import into.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task ImportAsync(TextReader reader, Node node);
+    Task ImportAsync(TextReader reader, Node node, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Exports the contents of the specified <see cref="Node"/> into the specified <see cref="TextWriter"/>.
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter"/> to export the node to.</param>
     /// <param name="node">The <see cref="Node"/> to export.</param>
+    /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-    Task ExportAsync(TextWriter writer, Node node);
+    Task ExportAsync(TextWriter writer, Node node, CancellationToken cancellationToken = default);
 }
 
 /// <summary>

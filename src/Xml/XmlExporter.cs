@@ -2,6 +2,7 @@
 // This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Threading;
 using System.Xml.Linq;
 
 namespace NStructuredDataModel.Xml;
@@ -19,30 +20,32 @@ internal sealed class XmlExporter
         _rootElementName = _options.ConvertPropertyName(_options.RootElementName ?? "Root");
     }
 
-    internal XDocument Export(Node node)
+    internal XDocument Export(Node node, CancellationToken cancellationToken)
     {
         XDocument xdoc = new();
 
         XElement rootElement = new(_rootElementName);
         xdoc.Add(rootElement);
 
-        ExportNode(node, rootElement);
+        ExportNode(node, rootElement, cancellationToken);
 
         return xdoc;
     }
 
-    private void ExportNode(Node node, XElement element)
+    private void ExportNode(Node node, XElement element, CancellationToken cancellationToken)
     {
         if (node.TryGetAsArray(out object?[] array))
         {
             foreach (object? arrayValue in array)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 switch (arrayValue)
                 {
                     case Node childNode:
                         XElement childElement = new(_arrayElementName);
                         element.Add(childElement);
-                        ExportNode(childNode, childElement);
+                        ExportNode(childNode, childElement, cancellationToken);
                         break;
                     default:
                         XElement valueElement = new(_arrayElementName, new XText(arrayValue?.ToString() ?? string.Empty));
@@ -55,13 +58,15 @@ internal sealed class XmlExporter
         {
             foreach ((string property, NodeValue value) in node)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 string propertyName = !char.IsLetter(property[0]) ? $"_{property}" : property;
                 propertyName = _options.ConvertPropertyName(propertyName);
                 if (value.IsNode)
                 {
                     XElement childElement = new(propertyName);
                     element.Add(childElement);
-                    ExportNode(value.AsNode(), childElement);
+                    ExportNode(value.AsNode(), childElement, cancellationToken);
                 }
                 else
                 {

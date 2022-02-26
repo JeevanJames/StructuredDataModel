@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NStructuredDataModel.Json;
@@ -24,26 +25,28 @@ internal sealed class JsonExporter : IAsyncDisposable
         _writer = new Utf8JsonWriter(_stream, new JsonWriterOptions { Indented = true });
     }
 
-    internal async Task<ReadOnlyMemory<char>> ExportAsync(Node node)
+    internal async Task<ReadOnlyMemory<char>> ExportAsync(Node node, CancellationToken cancellationToken)
     {
         _writer.WriteStartObject();
-        ExportNode(node);
+        ExportNode(node, cancellationToken);
         _writer.WriteEndObject();
-        await _writer.FlushAsync().ConfigureAwait(false);
+        await _writer.FlushAsync(cancellationToken).ConfigureAwait(false);
 
         return Encoding.UTF8.GetString(_stream.ToArray()).AsMemory();
     }
 
-    private void ExportNode(Node node)
+    private void ExportNode(Node node, CancellationToken cancellationToken)
     {
         foreach ((string property, NodeValue value) in node)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             string propertyName = _options.ConvertPropertyName(property);
 
             if (value.IsNode)
             {
                 _writer.WriteStartObject(propertyName);
-                ExportNode(value.AsNode());
+                ExportNode(value.AsNode(), cancellationToken);
                 _writer.WriteEndObject();
             }
             else

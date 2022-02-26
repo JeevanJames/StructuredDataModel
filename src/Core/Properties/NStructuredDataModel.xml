@@ -36,25 +36,27 @@
         </member>
         <member name="T:NStructuredDataModel.IStructuredDataFormat">
             <summary>
-                Provides the ability to import/export a <see cref="T:NStructuredDataModel.Node"/> from/to a specific format like
-                JSON, XML, YAML, etc.
+                Provides the ability to import/export a <see cref="T:NStructuredDataModel.Node"/> from/to a specific format like that
+                supports hierarchical data such as JSON, XML, YAML, etc.
             </summary>
         </member>
-        <member name="M:NStructuredDataModel.IStructuredDataFormat.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node)">
+        <member name="M:NStructuredDataModel.IStructuredDataFormat.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node,System.Threading.CancellationToken)">
             <summary>
                 Imports the contents of the specified <see cref="T:System.IO.TextReader"/> <paramref name="reader"/>
                 into the specified <paramref name="node"/>.
             </summary>
             <param name="reader">The <see cref="T:System.IO.TextReader"/> whose contents are to be imported.</param>
             <param name="node">The <see cref="T:NStructuredDataModel.Node"/> instance to import into.</param>
+            <param name="cancellationToken">The token to monitor for cancellation requests.</param>
             <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
         </member>
-        <member name="M:NStructuredDataModel.IStructuredDataFormat.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node)">
+        <member name="M:NStructuredDataModel.IStructuredDataFormat.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node,System.Threading.CancellationToken)">
             <summary>
                 Exports the contents of the specified <see cref="T:NStructuredDataModel.Node"/> into the specified <see cref="T:System.IO.TextWriter"/>.
             </summary>
             <param name="writer">The <see cref="T:System.IO.TextWriter"/> to export the node to.</param>
             <param name="node">The <see cref="T:NStructuredDataModel.Node"/> to export.</param>
+            <param name="cancellationToken">The token to monitor for cancellation requests.</param>
             <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
         </member>
         <member name="T:NStructuredDataModel.StructuredDataFormatExtensions">
@@ -165,15 +167,15 @@
         <member name="T:NStructuredDataModel.StructuredDataFormatBase`1">
             <summary>
                 Abstract base class for creating <see cref="T:NStructuredDataModel.IStructuredDataFormat"/> classes. This base
-                class provides support for options and provides sync versions of the <see cref="M:NStructuredDataModel.StructuredDataFormatBase`1.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node)"/>
-                and <see cref="M:NStructuredDataModel.StructuredDataFormatBase`1.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node)"/> methods.
+                class provides support for options and provides sync versions of the <see cref="M:NStructuredDataModel.StructuredDataFormatBase`1.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node,System.Threading.CancellationToken)"/>
+                and <see cref="M:NStructuredDataModel.StructuredDataFormatBase`1.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node,System.Threading.CancellationToken)"/> methods.
             </summary>
             <typeparam name="TOptions">The type of the format options.</typeparam>
         </member>
-        <member name="M:NStructuredDataModel.StructuredDataFormatBase`1.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node)">
+        <member name="M:NStructuredDataModel.StructuredDataFormatBase`1.ImportAsync(System.IO.TextReader,NStructuredDataModel.Node,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:NStructuredDataModel.StructuredDataFormatBase`1.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node)">
+        <member name="M:NStructuredDataModel.StructuredDataFormatBase`1.ExportAsync(System.IO.TextWriter,NStructuredDataModel.Node,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:NStructuredDataModel.StructuredDataModel">
