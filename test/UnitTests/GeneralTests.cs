@@ -32,10 +32,10 @@ public sealed class GeneralTests
     public async Task ExportTest()
     {
         StructuredDataModel model = new();
-        model.Write("Log.Level", "Information")
-            .Write("Log.WriteToFile", true)
-            .Write("Log.MaxDepth", 4)
-            .Write("Settings.Default", (byte)10);
+        model.Write("Log.Level", "Information");
+        model.Write("Log.WriteToFile", true);
+        model.Write("Log.MaxDepth", 4);
+        model.Write("Settings.Default", (byte)10);
         model.WriteNode("Security.Authentication");
 
         JsonFormat jsonFormat = new();
@@ -64,13 +64,29 @@ public sealed class GeneralTests
 
     [Theory]
     [EmbeddedResourceContent("NStructuredDataModel.UnitTests.Heroes.yaml")]
-    public async Task GetNodeEntryValuesTest(string json)
+    public async Task GetFlattenedNodesTest(string json)
     {
         YamlFormat yamlFormat = new();
         StructuredDataModel model = await yamlFormat.ImportAsync(json);
-        List<NodeEntryValue> values = (await model.GetNodeEntryValues(true)).ToList();
+
+        var values = (await model.GetFlattenedNodes(true)).ToList();
 
         values.Count.ShouldBe(12);
+    }
+
+    [Theory]
+    [EmbeddedResourceContent("NStructuredDataModel.UnitTests.Heroes.yaml")]
+    public async Task TryGetAsArrayTest(string json)
+    {
+        IStructuredDataFormat yamlFormat = new YamlFormat();
+        StructuredDataModel model = await yamlFormat.ImportAsync(json);
+
+        Node heroesNode = model.ReadNode("settings", "heroes");
+        bool successful = heroesNode.TryGetAsArray(out IList<NodeValue> values);
+
+        successful.ShouldBeTrue();
+        values.Count.ShouldBe(4);
+        values.ShouldAllBe(nodeValue => nodeValue.IsNode);
     }
 
     [Theory]

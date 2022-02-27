@@ -2,6 +2,7 @@
 // This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Xml.Linq;
 
@@ -34,23 +35,22 @@ internal sealed class XmlExporter
 
     private void ExportNode(Node node, XElement element, CancellationToken cancellationToken)
     {
-        if (node.TryGetAsArray(out object?[] array))
+        if (node.TryGetAsArray(out IList<NodeValue> array))
         {
-            foreach (object? arrayValue in array)
+            foreach (NodeValue arrayValue in array)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                switch (arrayValue)
+                if (arrayValue.IsNode)
                 {
-                    case Node childNode:
-                        XElement childElement = new(_arrayElementName);
-                        element.Add(childElement);
-                        ExportNode(childNode, childElement, cancellationToken);
-                        break;
-                    default:
-                        XElement valueElement = new(_arrayElementName, new XText(arrayValue?.ToString() ?? string.Empty));
-                        element.Add(valueElement);
-                        break;
+                    XElement childElement = new(_arrayElementName);
+                    element.Add(childElement);
+                    ExportNode(arrayValue.AsNode(), childElement, cancellationToken);
+                }
+                else
+                {
+                    XElement valueElement = new(_arrayElementName, new XText(arrayValue.Value ?? string.Empty));
+                    element.Add(valueElement);
                 }
             }
         }

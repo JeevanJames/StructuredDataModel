@@ -4,9 +4,8 @@
 
 using System;
 using System.IO;
-using System.Linq;
+using System.Threading;
 
-using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
 namespace NStructuredDataModel.Yaml;
@@ -23,7 +22,7 @@ public sealed class YamlFormat : StructuredDataFormatBase<YamlFormatOptions>
     {
     }
 
-    protected override void Import(TextReader reader, Node node)
+    protected override void Import(TextReader reader, Node node, CancellationToken cancellationToken)
     {
         if (reader is null)
             throw new ArgumentNullException(nameof(reader));
@@ -35,6 +34,8 @@ public sealed class YamlFormat : StructuredDataFormatBase<YamlFormatOptions>
 
         foreach (YamlDocument yamlDocument in yaml.Documents)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             YamlImporter importer = new(yamlDocument, node);
             importer.Traverse();
         }

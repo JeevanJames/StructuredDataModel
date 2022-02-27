@@ -4,8 +4,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -44,6 +44,13 @@ public partial class Node : Dictionary<string, NodeValue>
         Node node = new();
         Add(key, new NodeValue(node));
         return node;
+    }
+
+    public void AddValue<T>(string key, T? value)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            throw new ArgumentException("Value key cannot be null or whitespace.", nameof(key));
+        Add(key, new NodeValue(value));
     }
 
     /// <summary>
@@ -115,12 +122,12 @@ public partial class Node : Dictionary<string, NodeValue>
         }
     }
 
-    public async Task<IEnumerable<NodeEntryValue>> GetNodeEntryValues(bool recursive = false)
+    public async Task<IEnumerable<FlattenedNode>> GetFlattenedNodes(bool recursive = false)
     {
-        List<NodeEntryValue> values = new();
+        List<FlattenedNode> values = new();
         await Traverse(values, valueVisitor: (nodeKey, nodeValue, state) =>
         {
-            state.Add(new NodeEntryValue(nodeKey, nodeValue));
+            state.Add(new FlattenedNode(nodeKey, nodeValue));
             return Task.CompletedTask;
         }, recursive: recursive).ConfigureAwait(false);
         return values;
@@ -136,11 +143,11 @@ public partial class Node : Dictionary<string, NodeValue>
     /// <returns>
     ///     <c>True</c>, if an array could be obtained from the child nodes; otherwise <c>false</c>.
     /// </returns>
-    public bool TryGetAsArray(out object?[] array)
+    public bool TryGetAsArray(out IList<NodeValue> array)
     {
         if (Count == 0)
         {
-            array = Array.Empty<object?>();
+            array = Array.Empty<NodeValue>();
             return false;
         }
 
@@ -148,22 +155,20 @@ public partial class Node : Dictionary<string, NodeValue>
         // if so, then proceed with the assumption that it is an array.
         if (!TryGetValue("0", out NodeValue firstValue))
         {
-            array = Array.Empty<object?>();
+            array = Array.Empty<NodeValue>();
             return false;
         }
 
         // Create an array and populate the first item.
-        array = new object?[Count];
-        array[0] = firstValue.Value;
+        array = new NodeValue[Count];
+        array[0] = firstValue;
 
         // Proceed with populating the rest of the array until we determine it is not an array.
-        int index = 1;
-        while (index < Count)
+        for (int i = 1; i < Count; i++)
         {
-            if (!TryGetValue(index.ToString(), out NodeValue value))
+            if (!TryGetValue(i.ToString(), out NodeValue value))
                 return false;
-            array[index] = value.Value;
-            index++;
+            array[i] = value;
         }
 
         return true;
@@ -191,7 +196,22 @@ public partial class Node : Dictionary<string, NodeValue>
         return Read(propertyNames, defaultValue);
     }
 
-    public Node Write<T>(ICollection<string> propertyPath, T? value)
+    public Node ReadNode(params string[] nodePath)
+    {
+        ValidatePropertyPath(nodePath);
+        return GetOrCreateNodePath(nodePath);
+    }
+
+    public Node ReadNode(string nodePath)
+    {
+        if (nodePath is null)
+            throw new ArgumentNullException(nameof(nodePath));
+
+        string[] nodePathArray = nodePath.Split('.', StringSplitOptions.RemoveEmptyEntries);
+        return ReadNode(nodePathArray);
+    }
+
+    public void Write<T>(ICollection<string> propertyPath, T? value)
     {
         ValidatePropertyPath(propertyPath);
         ValidatePropertyValue(value);
@@ -199,11 +219,9 @@ public partial class Node : Dictionary<string, NodeValue>
         Node parentNode = GetPropertyParentNode(propertyPath);
         string propertyName = propertyPath.Last();
         parentNode.AddOrUpdate(propertyName, new NodeValue(value));
-
-        return this;
     }
 
-    public Node Write<T>(string propertyName, T? value)
+    public void Write<T>(string propertyName, T? value)
     {
         if (propertyName is null)
             throw new ArgumentNullException(nameof(propertyName));
@@ -212,23 +230,22 @@ public partial class Node : Dictionary<string, NodeValue>
         if (propertyPath.Any(string.IsNullOrWhiteSpace))
             throw new ArgumentException($"Property name '{propertyName}' is invalid.", nameof(propertyName));
 
-        return Write(propertyPath, value);
+        Write(propertyPath, value);
     }
 
-    public Node WriteNode(ICollection<string> nodePath)
+    public void WriteNode(params string[] nodePath)
     {
         ValidatePropertyPath(nodePath);
         GetOrCreateNodePath(nodePath);
-        return this;
     }
 
-    public Node WriteNode(string nodePath)
+    public void WriteNode(string nodePath)
     {
         if (nodePath is null)
             throw new ArgumentNullException(nameof(nodePath));
 
         string[] pathParts = nodePath.Split('.', StringSplitOptions.RemoveEmptyEntries);
-        return WriteNode(pathParts);
+        WriteNode(pathParts);
     }
 
     private static void ValidatePropertyPath(ICollection<string> propertyPath)
@@ -336,28 +353,4 @@ public partial class Node : Dictionary<string, NodeValue>
         typeof(double),
         typeof(decimal),
     };
-}
-
-[DebuggerDisplay("{DebuggerDisplay(),nq}")]
-public sealed class NodeEntryValue
-{
-    internal NodeEntryValue(IList<string> keyPath, object? value)
-    {
-        KeyPath = new List<string>(keyPath);
-        Value = value;
-    }
-
-    public IList<string> KeyPath { get; }
-
-    public object? Value { get; }
-
-    public string KeyPathAsString(string nameSeparator)
-    {
-        return string.Join(nameSeparator, KeyPath);
-    }
-
-    public string DebuggerDisplay()
-    {
-        return $"{KeyPathAsString(".")} = {Value ?? "<NULL>"}";
-    }
 }

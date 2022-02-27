@@ -28,11 +28,11 @@ public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
     /// <inheritdoc />
     public virtual Task ImportAsync(TextReader reader, Node node, CancellationToken cancellationToken = default)
     {
-        Import(reader, node);
+        Import(reader, node, cancellationToken);
         return Task.CompletedTask;
     }
 
-    protected virtual void Import(TextReader reader, Node node)
+    protected virtual void Import(TextReader reader, Node node, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
@@ -40,11 +40,11 @@ public abstract class StructuredDataFormatBase<TOptions> : IStructuredDataFormat
     /// <inheritdoc />
     public virtual Task ExportAsync(TextWriter writer, Node node, CancellationToken cancellationToken = default)
     {
-        Export(writer, node);
+        Export(writer, node, cancellationToken);
         return Task.CompletedTask;
     }
 
-    protected virtual void Export(TextWriter writer, Node node)
+    protected virtual void Export(TextWriter writer, Node node, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
