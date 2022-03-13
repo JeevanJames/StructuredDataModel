@@ -64,7 +64,10 @@ internal sealed class YamlImporter
 
     private static void SetScalarValue(Node parentNode, string propertyName, object? value)
     {
-        //TODO: Should we validate the value here?
+        // Check for string values as boolean
+        //TODO: This will treat strings with true/false values as boolean. Need to handle this.
+        if (value is string str && bool.TryParse(str, out bool asBool))
+            value = asBool;
         parentNode.AddOrUpdate(propertyName, new NodeValue(value));
     }
 
