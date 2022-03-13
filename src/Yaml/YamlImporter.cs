@@ -66,8 +66,14 @@ internal sealed class YamlImporter
     {
         // Check for string values as boolean
         //TODO: This will treat strings with true/false values as boolean. Need to handle this.
-        if (value is string str && bool.TryParse(str, out bool asBool))
-            value = asBool;
+        if (value is string str)
+        {
+            if (string.Equals(str, "true", StringComparison.OrdinalIgnoreCase))
+                value = true;
+            else if (string.Equals(str, "false", StringComparison.OrdinalIgnoreCase))
+                value = false;
+        }
+
         parentNode.AddOrUpdate(propertyName, new NodeValue(value));
     }
 
@@ -83,7 +89,7 @@ internal sealed class YamlImporter
         {
             // If the property is a variable node, that's fine.
             if (value.IsNode)
-                return value.AsNode();
+                return value.Node;
 
             // If the property is any other type, that means it's a scalar value and hence a
             // leaf node. This should not be allowed.

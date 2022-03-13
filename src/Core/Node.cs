@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -108,7 +107,7 @@ public partial class Node : Dictionary<string, NodeValue>
                 if (nodeVisitor is not null)
                     await nodeVisitor(path, state).ConfigureAwait(false);
                 path.Add(key);
-                await TraverseRecursive(value.AsNode(), state, path, nodeVisitor, valueVisitor, recursive)
+                await TraverseRecursive(value.Node, state, path, nodeVisitor, valueVisitor, recursive)
                     .ConfigureAwait(false);
             }
             else
@@ -294,7 +293,7 @@ public partial class Node : Dictionary<string, NodeValue>
                 throw new InvalidOperationException(errorMessage);
             }
 
-            currentNode = nodeValue.AsNode();
+            currentNode = nodeValue.Node;
         }
 
         return currentNode;

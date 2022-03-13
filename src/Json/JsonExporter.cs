@@ -46,7 +46,7 @@ internal sealed class JsonExporter : IAsyncDisposable
             if (value.IsNode)
             {
                 _writer.WriteStartObject(propertyName);
-                ExportNode(value.AsNode(), cancellationToken);
+                ExportNode(value.Node, cancellationToken);
                 _writer.WriteEndObject();
             }
             else

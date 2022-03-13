@@ -133,7 +133,7 @@
         </member>
         <member name="T:NStructuredDataModel.NodeValue">
             <summary>
-                Represents a <see cref="T:NStructuredDataModel.Node"/> value. This can be an object value (must be convertable to
+                Represents a <see cref="P:NStructuredDataModel.NodeValue.Node"/> value. This can be an object value (must be convertable to
                 and from string) or another Node, forming a hierarchy.
             </summary>
         </member>

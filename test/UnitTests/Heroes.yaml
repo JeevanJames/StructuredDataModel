@@ -1,6 +1,6 @@
 ﻿log:
     level: Information
-    write_to_file: true
+    write_to_file: True
     max_depth: 4
 settings:
     default: 10

@@ -45,7 +45,7 @@ internal sealed class XmlExporter
                 {
                     XElement childElement = new(_arrayElementName);
                     element.Add(childElement);
-                    ExportNode(arrayValue.AsNode(), childElement, cancellationToken);
+                    ExportNode(arrayValue.Node, childElement, cancellationToken);
                 }
                 else
                 {
@@ -66,7 +66,7 @@ internal sealed class XmlExporter
                 {
                     XElement childElement = new(propertyName);
                     element.Add(childElement);
-                    ExportNode(value.AsNode(), childElement, cancellationToken);
+                    ExportNode(value.Node, childElement, cancellationToken);
                 }
                 else
                 {

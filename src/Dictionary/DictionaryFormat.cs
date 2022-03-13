@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace NStructuredDataModel.Dictionary
+﻿namespace NStructuredDataModel.Dictionary
 {
     public sealed class DictionaryFormat : StructuredDataFormatBase<DictionaryFormatOptions>
     {
@@ -18,16 +10,6 @@ namespace NStructuredDataModel.Dictionary
         public DictionaryFormat(DictionaryFormatOptions options)
             : base(options)
         {
-        }
-
-        protected override void Import(TextReader reader, Node node, CancellationToken cancellationToken)
-        {
-            base.Import(reader, node, cancellationToken);
-        }
-
-        protected override void Export(TextWriter writer, Node node, CancellationToken cancellationToken)
-        {
-            base.Export(writer, node, cancellationToken);
         }
     }
 

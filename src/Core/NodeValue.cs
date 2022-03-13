@@ -35,6 +35,8 @@ public readonly struct NodeValue
         }
     }
 
+    public Node Node => _node ?? throw new InvalidOperationException("Current value is not a node.");
+
     /// <summary>
     ///     Gets the original value of this node.
     /// </summary>
@@ -76,11 +78,6 @@ public readonly struct NodeValue
         if (!converter.CanConvertFrom(typeof(string)))
             throw new InvalidOperationException($"Cannot convert to type '{type}' from a string.");
         return converter.ConvertFromString(Value);
-    }
-
-    public Node AsNode()
-    {
-        return IsNode ? _node! : throw new InvalidCastException("The current value is not a node.");
     }
 
     public override string ToString()
